@@ -19,7 +19,7 @@ public class OnButtonHovering : MonoBehaviour, IPointerEnterHandler, IPointerExi
     {
         buttonTransform.DOKill();
         buttonTransform.DOScale(scaleMultiplier, 0.2f).SetEase(Ease.OutBack);
-        AudioManager.Instance.PlaySound(AudioManager.Instance.hoverSound);
+        AudioManager.Instance?.PlaySound(AudioManager.Instance.hoverSound);
     }
 
     public void OnPointerExit(PointerEventData eventData)

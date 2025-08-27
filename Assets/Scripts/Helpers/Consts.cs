@@ -9,5 +9,15 @@ public class Consts
         public const string LIBRARY = "LibraryScene";
         public const string SACRIFICE = "SacrificeScene";
         public const string CHARACTER = "CharacterCustomizationScene";
+        public const string MARKET = "MarketScene";
+    }
+    public struct Animations
+    {
+        public const string MARKET = "isClicked";
+        public const string DOOR_ANIMATION = "MarketDoorOpen";
+    }
+    public struct OzSpecialEffects
+    {
+
     }
 }
