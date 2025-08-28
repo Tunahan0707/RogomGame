@@ -1,10 +1,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System;
 
 public class OnMarketButtonClicked : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -18,21 +16,21 @@ public class OnMarketButtonClicked : MonoBehaviour, IPointerEnterHandler, IPoint
 
     private void Awake()
     {
-        marketAnimator = this.gameObject.GetComponent<Animator>();
-        buttonTransform = this.transform;
+        marketAnimator = gameObject.GetComponent<Animator>();
+        buttonTransform = transform;
         originalScale = buttonTransform.localScale;
-        this.gameObject.GetComponent<Button>().onClick.AddListener(() =>
+        gameObject.GetComponent<Button>().onClick.AddListener(() =>
         {
             marketAnimator.SetBool(Consts.Animations.MARKET, true);
             marketAnimator.Play(Consts.Animations.DOOR_ANIMATION);
             _ = StartCoroutine(PlayAnimationAndLoadScene());
         });
-        GameObject fadeObj = new GameObject("FadeCanvas");
+        GameObject fadeObj = new("FadeCanvas");
         fadeObj.transform.SetParent(transform.root, false);
         fadeCanvas = fadeObj.AddComponent<CanvasGroup>();
         var canvas = fadeObj.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        fadeObj.AddComponent<UnityEngine.UI.Image>().color = Color.black;
+        fadeObj.AddComponent<Image>().color = Color.black;
         fadeCanvas.alpha = 0;
         fadeObj.GetComponent<RectTransform>().anchorMin = Vector2.zero;
         fadeObj.GetComponent<RectTransform>().anchorMax = Vector2.one;
