@@ -14,6 +14,6 @@ public class GoToMainMenu : MonoBehaviour
 
     private void OnButtonClick()
     {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene(Consts.Scenes.MAIN_MENU);
     }
 }

@@ -1,24 +1,24 @@
 using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.EventSystems;
-using System;
 
 public class OnButtonHovering : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Scaling")]
     [SerializeField] private float scaleMultiplier = 1.1f;
     private Transform buttonTransform;
+    private Vector3 originalScale = Vector3.one;
 
     private void Awake()
     {
-        buttonTransform = this.transform;
+        buttonTransform = transform;
+        originalScale = buttonTransform.localScale;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         buttonTransform.DOKill();
-        buttonTransform.DOScale(scaleMultiplier, 0.2f).SetEase(Ease.OutBack);
+        buttonTransform.DOScale(originalScale * scaleMultiplier, 0.2f).SetEase(Ease.OutBack);
         AudioManager.Instance?.PlaySound(AudioManager.Instance.hoverSound);
     }
 
@@ -26,7 +26,7 @@ public class OnButtonHovering : MonoBehaviour, IPointerEnterHandler, IPointerExi
     {
         if (buttonTransform == null) return;
         buttonTransform.DOKill();
-        buttonTransform.DOScale(1f, 0.2f).SetEase(Ease.OutBack);
+        buttonTransform.DOScale(originalScale, 0.2f).SetEase(Ease.OutBack);
     }
 
 

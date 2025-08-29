@@ -18,4 +18,8 @@ public class Consts
     {
 
     }
+    public struct EnemySpecialEffects
+    {
+
+    }
 }

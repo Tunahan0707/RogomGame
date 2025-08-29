@@ -4,12 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameSceneManager : MonoBehaviour
 {
     [Header("UI Elements")]
     [SerializeField] private Button continueButton;
     [SerializeField] private Button pauseButton;
+    [SerializeField] private Button resumeButton;
+    [SerializeField] private Button mainMenuButton;
     [SerializeField] private TMP_Text roomCountText;
     [SerializeField] private TMP_Text floorCountText;
     [SerializeField] private GameObject pausePanel;
@@ -35,6 +38,14 @@ public class GameSceneManager : MonoBehaviour
         pauseButton.onClick.AddListener(() =>
         {
             pausePanel.SetActive(!pausePanel.activeSelf);
+        });
+        resumeButton.onClick.AddListener(() =>
+        {
+            pausePanel.SetActive(false);
+        });
+        mainMenuButton.onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene(Consts.Scenes.MAIN_MENU);
         });
         roomCountText.text = "1. Oda";
         floorCountText.text = "1. Kat";

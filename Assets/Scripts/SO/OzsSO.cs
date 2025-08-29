@@ -1,13 +1,5 @@
+using System.Collections.Generic;
 using UnityEngine;
-
-public enum OzType
-{
-    Common,
-    Uncommon,
-    Rare,
-    Epic,
-    Legendary
-}
 
 [CreateAssetMenu(fileName = "New Öz", menuName = "ScriptableObjects/Öz")]
 public class OzsSo : ScriptableObject
@@ -16,16 +8,17 @@ public class OzsSo : ScriptableObject
     public string ozName;
     public string description;
     public Sprite artwork;
+    public OzType ozType;
     [Header("Öz Stats")]
-    public int attackMultiplier;
-    public int defenseMultiplier;
-    public int extraHealth;
-    public int healing;
-    public int extraHealing;
-    public int goldMultiplier;
-    public int xpMultiplier;
-    public int extraXp;
-    public int PUAN_Multiplier;
-    public int extraGold;
-    public string specialEffect;
+    public int attackMultiplier = 1;
+    public int defenseMultiplier = 1;
+    public int extraHealth = 0;
+    public int healing = 0;
+    public int extraHealing = 0;
+    public int goldMultiplier = 1;
+    public int xpMultiplier = 1;
+    public int extraXp = 0;
+    public int PUAN_Multiplier = 1;
+    public int extraGold = 0;
+    public List<string> specialEffects = new();
 }

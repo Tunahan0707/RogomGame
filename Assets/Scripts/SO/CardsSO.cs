@@ -1,7 +1,5 @@
-using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
-using static CardsSO;
 
 [CreateAssetMenu(fileName = "NewCard", menuName = "ScriptableObjects/Card")]
 public class CardsSO : ScriptableObject
@@ -18,11 +16,12 @@ public class CardsSO : ScriptableObject
     public string description;
     public Sprite artwork;
     public CardType cardType;
+    public CardRarelitys cardRarelity;
     public int cost;
 
 #if UNITY_EDITOR
-    [UnityEditor.CustomEditor(typeof(CardsSO))]
-    public class CardsSOEditor : UnityEditor.Editor
+    [CustomEditor(typeof(CardsSO))]
+    public class CardsSOEditor : Editor
     {
         public override void OnInspectorGUI()
         {
@@ -41,7 +40,7 @@ public class CardsSO : ScriptableObject
 
             if (GUI.changed)
             {
-                UnityEditor.EditorUtility.SetDirty(card);
+                EditorUtility.SetDirty(card);
             }
         }
     }
