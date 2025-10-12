@@ -2,15 +2,35 @@ using UnityEngine;
 
 public class FightManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private EnemyManager enemyManager;
+    void OnEnable()
     {
-        
+        GameSceneManager.OnContinueButtonClicked += HandleContinueButtonClicked;
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnDisable()
     {
-        
+        GameSceneManager.OnContinueButtonClicked -= HandleContinueButtonClicked;
+    }
+
+    void Start()
+    {
+        enemyManager.SelectEnemy(EnemyType.Normal);
+    }
+
+    private void HandleContinueButtonClicked()
+    {
+        if (RandomRoomSelector.selectedRoom == RoomType.Fight)
+        {
+            enemyManager.SelectEnemy(EnemyType.Normal);
+        }
+        else if (RandomRoomSelector.selectedRoom == RoomType.MiniBoss)
+        {
+            enemyManager.SelectEnemy(EnemyType.MiniBoss);
+        }
+        else if (RandomRoomSelector.selectedRoom == RoomType.Boss)
+        {
+            enemyManager.SelectEnemy(EnemyType.Boss);
+        }
     }
 }

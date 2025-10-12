@@ -1,7 +1,9 @@
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
+[RequireComponent(typeof(Button))]
 public class OnButtonHovering : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Scaling")]

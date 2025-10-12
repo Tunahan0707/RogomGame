@@ -16,12 +16,16 @@ public class GameSceneManager : MonoBehaviour
     [SerializeField] private TMP_Text roomCountText;
     [SerializeField] private TMP_Text floorCountText;
     [SerializeField] private GameObject pausePanel;
+    
+    [Header("Rooms")]
     [SerializeField] private GameObject marketRoom;
     [SerializeField] private GameObject fightRoom;
     [SerializeField] private GameObject gainRoom;
     [SerializeField] private GameObject upgradeRoom;
     [SerializeField] private GameObject restRoom;
     [SerializeField] private GameObject background;
+
+    [Header("Animations")]
     [SerializeField] private int onFightYValue = 5;
     [SerializeField] private int offFightYValue = -5;
     [SerializeField] private float animationDuration = 0.5f;
@@ -31,6 +35,11 @@ public class GameSceneManager : MonoBehaviour
     private int room;
 
     public static event Action OnContinueButtonClicked;
+    private EnemyManager enemyManager;
+
+    private TurnManager turnManager => GetComponent<TurnManager>();
+
+    public int HandleDrawDeckCompleted { get; private set; }
 
     void Awake()
     {
@@ -58,11 +67,11 @@ public class GameSceneManager : MonoBehaviour
         upgradeRoom.SetActive(false);
         gainRoom.SetActive(false);
         restRoom.SetActive(false);
-
+        enemyManager = GetComponent<EnemyManager>();
     }
-    void Start()
+    private void Start()
     {
-        StartCoroutine(FadingForStart());
+        EnterRoom(currentRoomType);
     }
 
     private IEnumerator FadingForStart()
@@ -81,11 +90,10 @@ public class GameSceneManager : MonoBehaviour
         currentRoomType = RandomRoomSelector.selectedRoom;
         roomCountText.text = room + ". Oda";
         floorCountText.text = floor + ". Kat";
-        if (isFirstRoom)
-        {
-            return;
-        }
+        FightDataHolder.Instance.SaveDatas();
+        if (isFirstRoom) { return; }
         EnterRoom(currentRoomType);
+
     }
     private void EnterRoom(RoomType roomType)
     {
@@ -103,27 +111,30 @@ public class GameSceneManager : MonoBehaviour
         gainRoom.SetActive(roomType == RoomType.GainOz || roomType == RoomType.CardChoice);
         restRoom.SetActive(roomType == RoomType.RestRoom);
 
-        // 3. Background hedef pozisyonunu belirle
-        float targetY = (roomType == RoomType.Fight || roomType == RoomType.MiniBoss || roomType == RoomType.Boss)
-            ? onFightYValue
-            : offFightYValue;
+        // 3. Gösterilecek mi? Sadece fight odalarında animasyon
+        bool isFightRoom = roomType == RoomType.Fight || roomType == RoomType.MiniBoss || roomType == RoomType.Boss;
+        float targetY = isFightRoom ? onFightYValue : offFightYValue;
 
-        // 4. Gösterilsin mi gizlensin mi?
-        bool showBackgroundMove = (roomType == RoomType.Fight || roomType == RoomType.MiniBoss || roomType == RoomType.Boss);
-
-        if (showBackgroundMove)
+        if (isFightRoom)
         {
-            // Kullanıcı görecek → Fade açılırken animasyonlu hareket
+            // Background'u önce aşağıya koy (offFightYValue) → sonra yukarıya animasyonla çıkart
+            background.transform.localPosition = new Vector3(
+                background.transform.localPosition.x,
+                offFightYValue,
+                background.transform.localPosition.z);
+
+            // Fade açılırken yukarıya hareket etsin
             StartCoroutine(FadeManager.Instance.FadeIn());
-            background.transform.DOLocalMoveY(targetY, animationDuration).SetEase(Ease.OutCubic);
+            background.transform.DOLocalMoveY(onFightYValue, animationDuration).SetEase(Ease.OutCubic);
+            yield return new WaitForSeconds(animationDuration);
         }
         else
         {
-            // Kullanıcı görmeyecek → Anında hareket, sonra fade açılır
+            // Fight değil → direkt yeni pozisyona ışınla
             background.transform.DOLocalMoveY(targetY, 0f);
             yield return StartCoroutine(FadeManager.Instance.FadeIn());
         }
-
+        
     }
 
 

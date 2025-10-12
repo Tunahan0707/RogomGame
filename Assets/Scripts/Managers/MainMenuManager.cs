@@ -2,11 +2,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using System;
 
 public class MainMenuManager : MonoBehaviour
 {
     [Header("UI Elements")]
-    [SerializeField] private Button playButton;
+    [SerializeField] private Button continueButton;
+    [SerializeField] private Button newGameButton;
     [SerializeField] private Button libraryButton;
     [SerializeField] private Button sacrificeButton;
     [SerializeField] private Button quitButton;
@@ -17,16 +19,25 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private float settingsPanelVisibleX = 0;
     [SerializeField] private float settingsPanelHiddenX = -500;
     [SerializeField] private float settingsPanelAnimationDuration = 0.5f;
+
+    [SerializeField] private GameStartManager gameStartManager;
     private bool isSettingsPanelVisible = false;
 
-    void Awake()
+    private void Awake()
     {
-        playButton.onClick.AddListener(() => SceneManager.LoadScene(Consts.Scenes.GAME));
+
+        newGameButton.onClick.AddListener(() => gameStartManager.NewGame());
+        continueButton.onClick.AddListener(() => gameStartManager.ContinueGame());
         libraryButton.onClick.AddListener(() => SceneManager.LoadScene(Consts.Scenes.LIBRARY));
         sacrificeButton.onClick.AddListener(() => SceneManager.LoadScene(Consts.Scenes.SACRIFICE));
         quitButton.onClick.AddListener(Application.Quit);
         settingsButton.onClick.AddListener(OnSettingsButtonClick);
         characterButton.onClick.AddListener(() => SceneManager.LoadScene(Consts.Scenes.CHARACTER));
+    }
+    private void Start()
+    {
+        bool saveExists = SaveManager.AllSavesExists();
+        continueButton.interactable = saveExists;
     }
 
     private void OnSettingsButtonClick()

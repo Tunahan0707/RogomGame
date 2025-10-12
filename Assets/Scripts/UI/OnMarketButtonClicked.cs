@@ -12,53 +12,36 @@ public class OnMarketButtonClicked : MonoBehaviour, IPointerEnterHandler, IPoint
     private Vector3 originalScale;
     private Transform buttonTransform;
     private Animator marketAnimator;
-    private CanvasGroup fadeCanvas; // Moved declaration here
 
     private void Awake()
     {
         marketAnimator = gameObject.GetComponent<Animator>();
         buttonTransform = transform;
         originalScale = buttonTransform.localScale;
+
+        // Butona tıklandığında çağrılacak event
         gameObject.GetComponent<Button>().onClick.AddListener(() =>
         {
             marketAnimator.SetBool(Consts.Animations.MARKET, true);
             marketAnimator.Play(Consts.Animations.DOOR_ANIMATION);
             _ = StartCoroutine(PlayAnimationAndLoadScene());
         });
-        GameObject fadeObj = new("FadeCanvas");
-        fadeObj.transform.SetParent(transform.root, false);
-        fadeCanvas = fadeObj.AddComponent<CanvasGroup>();
-        var canvas = fadeObj.AddComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        fadeObj.AddComponent<Image>().color = Color.black;
-        fadeCanvas.alpha = 0;
-        fadeObj.GetComponent<RectTransform>().anchorMin = Vector2.zero;
-        fadeObj.GetComponent<RectTransform>().anchorMax = Vector2.one;
-        fadeObj.GetComponent<RectTransform>().offsetMin = Vector2.zero;
-        fadeObj.GetComponent<RectTransform>().offsetMax = Vector2.zero;
+    }
 
-        System.Collections.IEnumerator FadeOut()
-        {
-            fadeCanvas.gameObject.SetActive(true);
-            float duration = 0.5f;
-            float elapsed = 0f;
-            while (elapsed < duration)
-            {
-                elapsed += Time.deltaTime;
-                fadeCanvas.alpha = Mathf.Lerp(0, 1, elapsed / duration);
-                yield return null;
-            }
-            fadeCanvas.alpha = 1;
-        }
+    private System.Collections.IEnumerator PlayAnimationAndLoadScene()
+    {
+        // Fade Out başlat
+        yield return StartCoroutine(FadeManager.Instance.FadeOut());
 
-        System.Collections.IEnumerator PlayAnimationAndLoadScene()
-        {
-            yield return StartCoroutine(FadeOut());
-            marketAnimator.Play(Consts.Animations.DOOR_ANIMATION);
-            yield return new WaitForSeconds(marketAnimator.GetCurrentAnimatorStateInfo(0).length);
-            marketAnimator.SetBool(Consts.Animations.MARKET, false);
-            SceneManager.LoadScene(Consts.Scenes.MARKET);
-        }
+        // Kapı animasyonu oynat
+        marketAnimator.Play(Consts.Animations.DOOR_ANIMATION);
+        yield return new WaitForSeconds(marketAnimator.GetCurrentAnimatorStateInfo(0).length);
+
+        // Animator parametresini resetle
+        marketAnimator.SetBool(Consts.Animations.MARKET, false);
+
+        // Sahneyi yükle
+        SceneManager.LoadScene(Consts.Scenes.MARKET);
     }
 
     public void OnPointerEnter(PointerEventData eventData)

@@ -18,35 +18,8 @@ public class CardsSO : ScriptableObject
     public CardType cardType;
     public CardRarelitys cardRarelity;
     public int cost;
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(CardsSO))]
-    public class CardsSOEditor : Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            var card = (CardsSO)target;
-
-            card.cardName = EditorGUILayout.TextField("Card Name", card.cardName);
-            card.description = EditorGUILayout.TextField("Description", card.description);
-            card.artwork = (Sprite)EditorGUILayout.ObjectField("Artwork", card.artwork, typeof(Sprite), false);
-            card.cardType = (CardType)EditorGUILayout.EnumPopup("Card Type", card.cardType);
-            card.cost = EditorGUILayout.IntField("Cost", card.cost);
-
-            if (card.cardType == CardType.Attack)
-            {
-                card.attackValue = EditorGUILayout.IntField("Attack Value", card.attackValue);
-            }
-
-            if (GUI.changed)
-            {
-                EditorUtility.SetDirty(card);
-            }
-        }
-    }
-#endif
-
-    [HideInInspector]
+    public int howManyHaveOnStart;
+    public string cardID;
     public int attackValue;
 
     public void DoCardTypeAction()
@@ -66,6 +39,16 @@ public class CardsSO : ScriptableObject
         else if (cardType == CardType.Defence)
         {
             // Do something specific for Defence cards
+        }
+    }
+    private void OnValidate()
+    {
+        if (string.IsNullOrEmpty(cardID))
+        {
+            cardID = System.Guid.NewGuid().ToString();
+            #if UNITY_EDITOR
+            EditorUtility.SetDirty(this);
+            #endif
         }
     }
 }

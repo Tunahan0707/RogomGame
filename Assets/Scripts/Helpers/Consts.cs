@@ -9,10 +9,32 @@ public class Consts
         public const string CHARACTER = "CharacterCustomizationScene";
         public const string MARKET = "MarketScene";
     }
+    public struct FileNames
+    {
+        public const string PlayerDataFile = "playerData.json";
+        public const string FightDataFile = "fightData.json";
+    }
+
+    public struct ListNames
+    {
+        public const string DRAW_DECK = "drawDeck";
+        public const string HAND = "hand";
+        public const string DISCARD_PILE = "discardPile";
+        public const string DECK = "deck";
+    }
     public struct Animations
     {
         public const string MARKET = "isClicked";
         public const string DOOR_ANIMATION = "MarketDoorOpen";
+    }
+    public struct FileWays
+    {
+        public const string CardsSO = "ScriptableObjects/Cards";
+        public const string EnemiesSO = "ScriptableObjects/Enemies";
+        public const string OzSO = "ScriptableObjects/Oz";
+        public const string CardsDB = "ScriptableObjects/Databases/CardsDataBase";
+        public const string EnemiesDB = "ScriptableObjects/Databases/EnemiesDataBase";
+        public const string OzsDB = "ScriptableObjects/Databases/OzsDataBase";
     }
     public struct OzSpecialEffects
     {

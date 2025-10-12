@@ -1,16 +1,28 @@
+using System;
 using UnityEngine;
 
 public class PUANManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static event Action<int> OnPUANChanged;
+
+    [SerializeField] private int puan = 0;
+    public int PUAN => puan;
+
+    public void AddPUAN(int amount)
     {
-        
+        puan += amount;
+        OnPUANChanged?.Invoke(puan);
     }
 
-    // Update is called once per frame
-    void Update()
+    public bool SpendPUAN(int amount)
     {
-        
+        if (puan >= amount)
+        {
+            puan -= amount;
+            OnPUANChanged?.Invoke(puan);
+            return true;
+        }
+        Debug.Log("Not enough PUAN!");
+        return false;
     }
 }
