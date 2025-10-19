@@ -5,9 +5,11 @@ using UnityEditor;
 using Unity.VisualScripting;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using System;
 
-public class CardDisplay : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler    
+public class CardDisplay : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
 {
+    public event Action<CardsSO> OnCardPlayedEvent;
     [SerializeField] private Image artwork;
     [SerializeField] private TMP_Text cardNameText;
     [SerializeField] private Button playButton;
@@ -21,6 +23,7 @@ public class CardDisplay : MonoBehaviour , IPointerEnterHandler, IPointerExitHan
     public string inDeckCardIDText;
 
     private Vector3 originalScale;
+    private Vector2 originalPosition;
     private Quaternion originalRotation;
     private RectTransform rect;
 
@@ -38,6 +41,7 @@ public class CardDisplay : MonoBehaviour , IPointerEnterHandler, IPointerExitHan
         rect = GetComponent<RectTransform>();
         originalScale = rect.localScale;
         originalRotation = rect.localRotation;
+        originalPosition = rect.anchoredPosition;
     }
 
     private void OnDestroy()
@@ -63,38 +67,17 @@ public class CardDisplay : MonoBehaviour , IPointerEnterHandler, IPointerExitHan
 
     private void OnCardPlayed()
     {
-        if (turnManager.currentTurn != TurnManager.Turn.Player) return;
-
-        Debug.Log($"Card Played: {cardData.cardName}");
-
-        ApplyCardEffect();
+        if (TurnManager.currentTurn != TurnManager.Turn.Player) return;
 
         if (cardManager.hand.Contains(inDeckCardIDText))
+        {
             cardManager.hand.Remove(inDeckCardIDText);
             cardManager.discardPile.Add(inDeckCardIDText);
-        CardManagerUI.Instance.CardPlayed(gameObject);
-
-    }
-
-    private void ApplyCardEffect()
-    {
-        switch (cardData.cardType)
-        {
-            case CardsSO.CardType.Attack:
-                turnManager.enemyManager.TakeDamage(cardData.attackValue);
-                break;
-            case CardsSO.CardType.Defence:
-                var player = FindObjectsByType<HealthManager>(FindObjectsSortMode.None)[0];
-                player.Heal(cardData.attackValue);
-                break;
-            case CardsSO.CardType.Skill:
-                Debug.Log("Skill kart efekti uygulanacak");
-                break;
-            case CardsSO.CardType.Power:
-                Debug.Log("Power kart efekti uygulanacak");
-                break;
+            CardManagerUI.Instance.CardPlayed(gameObject);
+            OnCardPlayedEvent?.Invoke(cardData);
         }
     }
+
     public string GetCardID()
     {
         return inDeckCardIDText;
@@ -118,6 +101,7 @@ public class CardDisplay : MonoBehaviour , IPointerEnterHandler, IPointerExitHan
     public void OnPointerExit(PointerEventData eventData)
     {
         rect.localScale = originalScale;
+        rect.anchoredPosition = originalPosition;
         HandLayout handLayout = transform.parent.GetComponent<HandLayout>();
         if (handLayout != null)
             handLayout.UpdateHandLayout();
@@ -133,7 +117,7 @@ public class CardDisplay : MonoBehaviour , IPointerEnterHandler, IPointerExitHan
         if (handLayout != null)
             handLayout.UpdateHandLayout();
     }
-    public string GetCardID(string inDeckCardIDText)
+    public static string GetCardID(string inDeckCardIDText)
     {
         if (AllCards.TryGetValue(inDeckCardIDText, out var card))
             return card.cardData.cardID;

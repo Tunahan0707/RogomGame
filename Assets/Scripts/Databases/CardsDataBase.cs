@@ -54,4 +54,9 @@ public class CardsDataBase : ScriptableObject
     {
         return cards.Find(card => card.cardID == cardID);
     }
+
+    public List<CardsSO> UnlockLevel(int lvl)
+    {
+        return cards.FindAll(card => card.unlockLevel == lvl);
+    }
 }

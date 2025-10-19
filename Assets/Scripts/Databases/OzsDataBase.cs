@@ -5,10 +5,20 @@ using System.Collections.Generic;
 public class OzsDataBase : ScriptableObject
 {
     [Header("Oz Data")]
-    public List<OzsSo> ozs;
+    public List<OzsSO> ozs;
 
     private void OnEnable()
     {
-        ozs = new List<OzsSo>(Resources.LoadAll<OzsSo>(Consts.FileWays.OzSO));
+        ozs = new List<OzsSO>(Resources.LoadAll<OzsSO>(Consts.FileWays.OzsSO));
+    }
+
+    public OzsSO GetOzByID(string id)
+    {
+        return ozs.Find(oz => oz.ozsID == id);
+    }
+
+    public List<OzsSO> UnlockLevel(int lvl)
+    {
+        return ozs.FindAll(oz => oz.unlockLevel == lvl);
     }
 }

@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class GameStartManager : MonoBehaviour
 {
+    public static GameType currentGameType;
     public void NewGame()
     {
         SaveManager.DeleteSave(Consts.FileNames.FightDataFile);
@@ -27,6 +28,7 @@ public class GameStartManager : MonoBehaviour
             holder.fightData = newFightData;
 
         SceneManager.LoadScene(Consts.Scenes.GAME);
+        currentGameType = GameType.NewGame;
     }
 
     public void ContinueGame()
@@ -45,7 +47,10 @@ public class GameStartManager : MonoBehaviour
         var holder = FindFirstObjectByType<PlayerDataHolder>();
         if (holder != null)
             holder.playerData = loadedData;
-
+        var fightHolder = FindFirstObjectByType<FightDataHolder>();
+        if (fightHolder != null)
+            fightHolder.fightData = loadedFightData;
         SceneManager.LoadScene(Consts.Scenes.GAME);
+        currentGameType = GameType.ContinueGame;
     }
 }

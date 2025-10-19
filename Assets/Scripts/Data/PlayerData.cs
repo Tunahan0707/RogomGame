@@ -9,6 +9,8 @@ public class PlayerData
     public int level;
     public int xp;
     public float maxHP;
+    public float extraHP;
+    public string currentPlayerID;
 
     public PlayerData()
     {
@@ -16,5 +18,6 @@ public class PlayerData
         level = 1;
         xp = 0;
         maxHP = 100;
+        extraHP = 0;
     }
 }

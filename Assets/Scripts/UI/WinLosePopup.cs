@@ -13,13 +13,13 @@ public class WinLosePopup : MonoBehaviour
     }
     void OnEnable()
     {
-        HealthManager.OnPlayerDied += ShowLosePopup;
+        PlayerManager.OnPlayerDied += ShowLosePopup;
         EnemyManager.OnEnemyDied += ShowWinPopup;
     }
 
     void OnDisable()
     {
-        HealthManager.OnPlayerDied -= ShowLosePopup;
+        PlayerManager.OnPlayerDied -= ShowLosePopup;
         EnemyManager.OnEnemyDied -= ShowWinPopup;
     }
     public void ShowWinPopup()

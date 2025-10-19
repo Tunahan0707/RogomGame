@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class CardManagerUI : MonoBehaviour
 {
@@ -15,6 +17,8 @@ public class CardManagerUI : MonoBehaviour
     [SerializeField] private CardManager cardManager;
     [SerializeField] private List<GameObject> currentHandUIs = new();
     public static HashSet<string> deckCardIDs = new();
+    public static HashSet<string> discardCardIDs = new();
+    public static HashSet<string> handCardIDs = new();
     [SerializeField] private List<GameObject> currentDiscardUIs = new();
     [SerializeField] private HandLayout handLayout;
 
@@ -26,6 +30,12 @@ public class CardManagerUI : MonoBehaviour
         // Sahnedeki CardManager referansını al
         cardManager = FindObjectsByType<CardManager>(FindObjectsSortMode.None)[0];
     }
+    private void OnEnable()
+    {
+        deckCardIDs.Clear();
+        discardCardIDs.Clear();
+        handCardIDs.Clear();
+    }
 
     public void StartDrawDeckUI(CardsSO card)
     {
@@ -36,7 +46,27 @@ public class CardManagerUI : MonoBehaviour
         cardGO.SetActive(false);
         deckCardIDs.Add(cardDisplay.GetCardID());
     }
-    
+    public void StartDiscardPileUI(CardsSO card)
+    {
+        GameObject cardGO = Instantiate(cardPrefab);
+        CardDisplay cardDisplay = cardGO.GetComponent<CardDisplay>();
+        cardDisplay.SetCard(card);
+        cardGO.transform.SetParent(discardPileParent, false);
+        cardGO.SetActive(false);
+        currentDiscardUIs.Add(cardGO);
+        discardCardIDs.Add(cardDisplay.GetCardID());
+    }
+    public void StartHandUI(CardsSO card)
+    {
+        GameObject cardGO = Instantiate(cardPrefab);
+        CardDisplay cardDisplay = cardGO.GetComponent<CardDisplay>();
+        cardDisplay.SetCard(card);
+        cardGO.transform.SetParent(handParent, false);
+        cardGO.SetActive(true);
+        currentHandUIs.Add(cardGO);
+        handLayout.AddCard(cardGO);
+        handCardIDs.Add(cardDisplay.GetCardID());
+    }
     public void UpdateDrawDeckUI(string cardID)
     {
         if (!deckCardIDs.Contains(cardID))
@@ -76,16 +106,20 @@ public class CardManagerUI : MonoBehaviour
         currentHandUIs.Add(cardGO);
         handLayout.AddCard(cardGO);
     }
-    public void ClearHandUI()
+    public IEnumerator ClearHandUI()
     {
-        foreach (var go in currentHandUIs)
+        TurnManager.endTurnButton1.gameObject.SetActive(false);
+        for (int i = currentHandUIs.Count - 1; i >= 0; i--)
         {
+            yield return new WaitForSeconds(0.1f);
+            GameObject go = currentHandUIs[i];
             go.SetActive(false);
             go.transform.SetParent(discardPileParent);
             currentDiscardUIs.Add(go);
+            currentHandUIs.RemoveAt(i);
+            handLayout.RemoveCard(go);
         }
         currentHandUIs.Clear();
-        handLayout.ClearHand();
     }
     public void CardPlayed(GameObject card)
     {

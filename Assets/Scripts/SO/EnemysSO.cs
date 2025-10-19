@@ -1,21 +1,34 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "New Enemy", menuName = "ScriptableObjects/Enemy")]
-public class EnemysSO : ScriptableObject
+public class EnemysSO : ScriptableObject, IGameObject
 {
     [Header("Enemy Info")]
     public string enemyName;
     public int health;
     public int damage;
+    public int baseShield = 0;
     public Sprite artwork;
     public EnemyType enemyType;
+    public bool isLocked;
+    public int unlockLevel;
+
     [Header("Enemy Abilities")]
     public List<string> specialAbilities = new();
+
     [Header("Enemy Rewards")]
     public int coinGive;
     public int experienceGive;
-    public string enemyID;
+
+    [HideInInspector] public string enemyID;
+
+    public string Name { get => enemyName; set => enemyName = value; }
+    public int UnlockLevel { get => unlockLevel; set => unlockLevel = value; }
+    public string ID { get => enemyID; set => enemyID = value; }
+    public bool IsLocked { get => isLocked; set => isLocked = value; }
+
 
     private void OnValidate()
     {

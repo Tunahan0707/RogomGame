@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using DG.Tweening.Plugins.Core.PathCore;
 
 public class DatabaseAutoUpdater : AssetPostprocessor
 {
@@ -27,14 +28,16 @@ public class DatabaseAutoUpdater : AssetPostprocessor
         return paths.Any(path =>
             path.Contains("Resources/" + Consts.FileWays.CardsSO) ||
             path.Contains("Resources/" + Consts.FileWays.EnemiesSO) ||
-            path.Contains("Resources/" + Consts.FileWays.OzSO));
+            path.Contains("Resources/" + Consts.FileWays.OzsSO) ||
+            path.Contains("Resources/"+ Consts.FileWays.PlayersSO));
     }
 
     private static void UpdateAllDatabases()
     {
         UpdateDatabase<CardsSO, CardsDataBase>(Consts.FileWays.CardsDB, Consts.FileWays.CardsSO);
         UpdateDatabase<EnemysSO, EnemiesDataBase>(Consts.FileWays.EnemiesDB, Consts.FileWays.EnemiesSO);
-        UpdateDatabase<OzsSo, OzsDataBase>(Consts.FileWays.OzsDB, Consts.FileWays.OzSO);
+        UpdateDatabase<OzsSO, OzsDataBase>(Consts.FileWays.OzsDB, Consts.FileWays.OzsSO);
+        UpdateDatabase<PlayersSO, PlayersDataBase>(Consts.FileWays.PlayersDB, Consts.FileWays.PlayersSO);
     }
 
     private static void UpdateDatabase<TSO, TDB>(string dbPath, string soFolder)

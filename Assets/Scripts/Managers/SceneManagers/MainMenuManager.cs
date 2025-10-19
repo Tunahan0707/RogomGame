@@ -36,7 +36,7 @@ public class MainMenuManager : MonoBehaviour
     }
     private void Start()
     {
-        bool saveExists = SaveManager.AllSavesExists();
+        bool saveExists = SaveManager.SaveExists(Consts.FileNames.FightDataFile);
         continueButton.interactable = saveExists;
     }
 

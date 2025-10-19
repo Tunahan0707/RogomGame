@@ -6,8 +6,8 @@ public static class SaveManager
     private static string GetPath(string fileName) => Path.Combine(Application.persistentDataPath, fileName + ".json");
 
     // Dosya adları
-    private static readonly string PlayerDataFile = "PlayerData";
-    private static readonly string FightDataFile = "FightData";
+    private static readonly string PlayerDataFile = Consts.FileNames.PlayerDataFile;
+    private static readonly string FightDataFile = Consts.FileNames.FightDataFile;
 
     // Generic Save
     public static void Save<T>(T data, string fileName)

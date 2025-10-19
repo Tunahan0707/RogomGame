@@ -615,6 +615,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c4f65183cb57d9489d235fdcdcfbcb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FightDataHolder
+  fightData:
+    coin: 0
+    currentHP: 0
+    enemyID: 0
+    currentEnemyHP: 0
+    currentRoomIndex: 1
+    currentFloorIndex: 1
+    currentEnemyShield: 0
+    turn: 0
+    currentRoomType: 0
+    deck: []
+    hand: []
+    discardPile: []
+    drawDeck: []
 --- !u!4 &284355058
 Transform:
   m_ObjectHideFlags: 0
@@ -1432,6 +1446,12 @@ MonoBehaviour:
     level: 1
     xp: 0
     maxHP: 100
+    extraHP: 0
+    currentPlayerID: 
+  cDB: {fileID: 11400000, guid: 036b32ecc84976b4a86995345c05bd57, type: 2}
+  pDB: {fileID: 11400000, guid: 9fb4dda26fc0c8443917523bbd1f3767, type: 2}
+  oDB: {fileID: 11400000, guid: 6b8952bf0f35db846bee28d7c641a699, type: 2}
+  eDB: {fileID: 11400000, guid: f6d0032bd4faef947be6427d249205e9, type: 2}
 --- !u!4 &1285909786
 Transform:
   m_ObjectHideFlags: 0

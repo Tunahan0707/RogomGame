@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewCard", menuName = "ScriptableObjects/Card")]
-public class CardsSO : ScriptableObject
+public class CardsSO : ScriptableObject, IGameObject
 {
     public enum CardType
     {
@@ -10,7 +10,7 @@ public class CardsSO : ScriptableObject
         Skill,
         Power,
         Defence
-        
+
     }
     public string cardName;
     public string description;
@@ -19,36 +19,24 @@ public class CardsSO : ScriptableObject
     public CardRarelitys cardRarelity;
     public int cost;
     public int howManyHaveOnStart;
-    public string cardID;
+    [HideInInspector] public string cardID;
     public int attackValue;
+    public bool isLocked;
+    public int unlockLevel;
 
-    public void DoCardTypeAction()
-    {
-        if (cardType == CardType.Attack)
-        {
-            // Do something specific for Attack cards
-        }
-        else if (cardType == CardType.Skill)
-        {
-            // Do something specific for Skill cards
-        }
-        else if (cardType == CardType.Power)
-        {
-            // Do something specific for Power cards
-        }
-        else if (cardType == CardType.Defence)
-        {
-            // Do something specific for Defence cards
-        }
-    }
+    public string Name { get => cardName; set => cardName = value; }
+    public int UnlockLevel { get => unlockLevel; set => unlockLevel = value; }
+    public string ID { get => cardID; set => cardID = value; }
+    public bool IsLocked { get => isLocked; set => isLocked = value; }
+
     private void OnValidate()
     {
         if (string.IsNullOrEmpty(cardID))
         {
             cardID = System.Guid.NewGuid().ToString();
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             EditorUtility.SetDirty(this);
-            #endif
+#endif
         }
     }
 }

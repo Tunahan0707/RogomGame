@@ -3,19 +3,30 @@ using UnityEngine;
 public class FightManager : MonoBehaviour
 {
     [SerializeField] private EnemyManager enemyManager;
-    void OnEnable()
+
+    private FightData loadedData => FightDataHolder.Instance.fightData;
+
+    private void Awake()
+    {
+        if (enemyManager == null)
+            enemyManager = FindAnyObjectByType<EnemyManager>();
+    }
+    private void OnEnable()
     {
         GameSceneManager.OnContinueButtonClicked += HandleContinueButtonClicked;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         GameSceneManager.OnContinueButtonClicked -= HandleContinueButtonClicked;
     }
 
-    void Start()
+    private void Start()
     {
-        enemyManager.SelectEnemy(EnemyType.Normal);
+        if (GameStartManager.currentGameType == GameType.NewGame)
+            enemyManager.SelectEnemy(EnemyType.Normal);
+        else if (GameStartManager.currentGameType == GameType.ContinueGame)
+            enemyManager.SpawnEnemyByID(loadedData.enemyID);
     }
 
     private void HandleContinueButtonClicked()

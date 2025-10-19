@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3e8bd00e6ab2644da34fa99808f7f3b, type: 3}
+  m_Name: PlayersDataBase
+  m_EditorClassIdentifier: Assembly-CSharp::PlayersDataBase
+  players:
+  - {fileID: 11400000, guid: 8baa3785c0dedeb4c8a538027da34046, type: 2}
+  - {fileID: 11400000, guid: 28d36200b6599b9478595d1955b499f6, type: 2}
+  - {fileID: 11400000, guid: b556bc82a5e7e4b4fa6b6c49618e2891, type: 2}
+  - {fileID: 11400000, guid: a84e532e8b850dc4abc9fac9e5ec53e0, type: 2}
+  - {fileID: 11400000, guid: 7c56958d10ef5e7478c33942c0447e79, type: 2}
+  - {fileID: 11400000, guid: e5f90b0575ec6c649ba6925ecfc867ce, type: 2}
+  - {fileID: 11400000, guid: 61e7f2dd07bb0d54bb970eb49fd1b766, type: 2}
+  - {fileID: 11400000, guid: 2a8b72e4aff0e394c8dd6c798b8a9c1a, type: 2}
+  - {fileID: 11400000, guid: 72838d447f867f2449afa0a4cf447a93, type: 2}
+  startingPlayer: {fileID: 11400000, guid: 8baa3785c0dedeb4c8a538027da34046, type: 2}

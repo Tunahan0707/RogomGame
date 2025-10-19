@@ -13,7 +13,7 @@ public class EnemiesDataBase : ScriptableObject
 
     private void OnEnable()
     {
-        enemies = new List<EnemysSO>(Resources.LoadAll<EnemysSO>(Consts.FileWays.EnemiesSO));
+        enemies = new(Resources.LoadAll<EnemysSO>(Consts.FileWays.EnemiesSO));
         normalEnemies = new();
         miniBossEnemies = new();
         bossEnemies = new();
@@ -40,5 +40,14 @@ public class EnemiesDataBase : ScriptableObject
             EnemyType.Special => specialEnemies[Random.Range(0, specialEnemies.Count)],
             _ => null,
         };
+    }
+    public EnemysSO GetEnemyByID(string id)
+    {
+        return enemies.Find(enemy => enemy.enemyID == id);
+    }
+
+    public List<EnemysSO> UnlockLevel(int lvl)
+    {
+        return enemies.FindAll(enemy => enemy.unlockLevel == lvl);
     }
 }

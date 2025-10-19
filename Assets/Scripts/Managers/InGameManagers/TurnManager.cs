@@ -1,64 +1,78 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.UI;
 
 public class TurnManager : MonoBehaviour
 {
     public enum Turn { Player, Enemy }
-    public Turn currentTurn = Turn.Player;
+    public static Turn currentTurn = Turn.Player;
+    public static bool isForStart = true;
 
     [Header("Managers")]
     public CardManager cardManager;
     public EnemyManager enemyManager;
 
+    private FightData loadedData => FightDataHolder.Instance.fightData;
+
+
     [Header("UI")]
     public Button endTurnButton;
+
+    public static Button endTurnButton1;
+
+    private int x;
 
     private void Awake()
     {
         cardManager = FindObjectsByType<CardManager>(FindObjectsSortMode.None)[0];
         enemyManager = FindObjectsByType<EnemyManager>(FindObjectsSortMode.None)[0];
+        endTurnButton1 = endTurnButton;
     }
 
     private void Start()
     {
-        endTurnButton.onClick.AddListener(EndPlayerTurn);
-        StartPlayerTurn();
+        endTurnButton1.onClick.AddListener(EndPlayerTurn);
+        isForStart = true;
+        currentTurn = loadedData.turn;
+        if (currentTurn == Turn.Player)
+            StartPlayerTurn();
+        else
+            StartEnemyTurn();
     }
 
     public void StartPlayerTurn()
     {
         currentTurn = Turn.Player;
-        Debug.Log("Player Turn Started");
-
-        cardManager.DrawCards(cardManager.handSize);
+        if (GameStartManager.currentGameType == GameType.NewGame && isForStart)
+            StartCoroutine(cardManager.DrawCards(cardManager.handSize));
+        if (!isForStart)
+            StartCoroutine(cardManager.DrawCards(cardManager.handSize));
+        x = UnityEngine.Random.Range(0, 7);
     }
 
     public void EndPlayerTurn()
     {
         if (currentTurn != Turn.Player) return;
 
-        Debug.Log("Player Turn Ended");
+        endTurnButton1.gameObject.SetActive(false);
         cardManager.DiscardHand();
-
+        isForStart = false;
         StartCoroutine(StartEnemyTurn());
     }
 
     private IEnumerator StartEnemyTurn()
     {
         currentTurn = Turn.Enemy;
-        Debug.Log("Enemy Turn Started");
 
-        // Basit enemy aksiyonu
         yield return new WaitForSeconds(1f);
-        enemyManager.TakeDamage(enemyManager.currentEnemy.damage);
 
+        enemyManager.EnemyAlgoritm(x);
         EndEnemyTurn();
     }
 
     private void EndEnemyTurn()
     {
-        Debug.Log("Enemy Turn Ended");
         StartPlayerTurn();
     }
 }

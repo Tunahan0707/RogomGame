@@ -31,10 +31,12 @@ public class Consts
     {
         public const string CardsSO = "ScriptableObjects/Cards";
         public const string EnemiesSO = "ScriptableObjects/Enemies";
-        public const string OzSO = "ScriptableObjects/Oz";
+        public const string OzsSO = "ScriptableObjects/Ozs";
+        public const string PlayersSO = "ScriptableObjects/Players";
         public const string CardsDB = "ScriptableObjects/Databases/CardsDataBase";
         public const string EnemiesDB = "ScriptableObjects/Databases/EnemiesDataBase";
         public const string OzsDB = "ScriptableObjects/Databases/OzsDataBase";
+        public const string PlayersDB = "ScriptableObjects/Databases/PlayersDataBase";
     }
     public struct OzSpecialEffects
     {

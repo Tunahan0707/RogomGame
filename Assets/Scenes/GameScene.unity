@@ -1487,6 +1487,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 593412971}
+  - component: {fileID: 593412972}
   m_Layer: 5
   m_Name: EnemySpawnPoint
   m_TagString: Untagged
@@ -1513,6 +1514,32 @@ RectTransform:
   m_AnchoredPosition: {x: 29.141968, y: 86.14899}
   m_SizeDelta: {x: 917.96, y: 522.46}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &593412972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 593412970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &599534828
 GameObject:
   m_ObjectHideFlags: 0
@@ -1878,6 +1905,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 701495352}
   m_CullTransparentMesh: 1
+--- !u!1 &737720531
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 737720532}
+  - component: {fileID: 737720533}
+  m_Layer: 5
+  m_Name: PlayerSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &737720532
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737720531}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1170753698}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.31189585, y: 0.28085187}
+  m_AnchorMax: {x: 0.31189585, y: 0.28085187}
+  m_AnchoredPosition: {x: 1.8500061, y: 12}
+  m_SizeDelta: {x: 350, y: 420}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &737720533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737720531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &997249530
 GameObject:
   m_ObjectHideFlags: 0
@@ -3098,8 +3187,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1136703976}
-  - {fileID: 593412971}
   - {fileID: 389492763}
+  - {fileID: 593412971}
+  - {fileID: 737720532}
   m_Father: {fileID: 1089853894}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4129,6 +4219,8 @@ GameObject:
   - component: {fileID: 1576329541}
   - component: {fileID: 1576329544}
   - component: {fileID: 1576329543}
+  - component: {fileID: 1576329546}
+  - component: {fileID: 1576329545}
   m_Layer: 0
   m_Name: UIElements
   m_TagString: Untagged
@@ -4199,6 +4291,34 @@ MonoBehaviour:
   deckText: {fileID: 589541229}
   discardText: {fileID: 1001528897}
   cardManager: {fileID: 1910047801}
+--- !u!114 &1576329545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1576329540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e2051dcc953a9a4da07881231ffe8d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyManagerUI
+  enemyPrefab: {fileID: 2857081919984160814, guid: c53cbbc20f574644b90c85fd0b4ea61d, type: 3}
+  spawnPoint: {fileID: 593412971}
+--- !u!114 &1576329546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1576329540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c467df744059d0948bd77df513da57be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerManagerUI
+  playerPrefab: {fileID: 2857081919984160814, guid: e5e2c5ace4f51cc4cbb3338793253a77, type: 3}
+  spawnPoint: {fileID: 737720532}
 --- !u!1 &1626016146
 GameObject:
   m_ObjectHideFlags: 0
@@ -4597,6 +4717,7 @@ GameObject:
   - component: {fileID: 1882721835}
   - component: {fileID: 1882721834}
   - component: {fileID: 1882721833}
+  - component: {fileID: 1882721836}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4678,6 +4799,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1882721836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882721832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!1 &1910047784
 GameObject:
   m_ObjectHideFlags: 0
@@ -4693,8 +4858,8 @@ GameObject:
   - component: {fileID: 1910047800}
   - component: {fileID: 1910047799}
   - component: {fileID: 1910047798}
-  - component: {fileID: 1910047797}
   - component: {fileID: 1910047796}
+  - component: {fileID: 1910047802}
   m_Layer: 0
   m_Name: GameSceneManagers
   m_TagString: Untagged
@@ -4770,19 +4935,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FightManager
   enemyManager: {fileID: 1910047800}
---- !u!114 &1910047797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1910047784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 289a14919676b094ebb2df5148d9e3bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthManager
-  <CurrentHealth>k__BackingField: 100
 --- !u!114 &1910047798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4795,7 +4947,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55a6fbb14cd459648976d4664b84a2b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TurnManager
-  currentTurn: 0
   cardManager: {fileID: 1910047801}
   enemyManager: {fileID: 1910047800}
   endTurnButton: {fileID: 1795034971}
@@ -4811,7 +4962,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 139603f24cf276749922b000628778b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CoinManager
-  <Coins>k__BackingField: 0
 --- !u!114 &1910047800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4825,10 +4975,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
   currentEnemy: {fileID: 0}
-  enemyPrefab: {fileID: 2857081919984160814, guid: c53cbbc20f574644b90c85fd0b4ea61d, type: 3}
-  spawnPoint: {fileID: 593412971}
   enemiesDataBase: {fileID: 11400000, guid: f6d0032bd4faef947be6427d249205e9, type: 2}
+  enemyManagerUI: {fileID: 1576329545}
   currentHealth: 0
+  shield: 0
 --- !u!114 &1910047801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4847,6 +4997,22 @@ MonoBehaviour:
   deck: []
   handSize: 5
   cardsDataBase: {fileID: 11400000, guid: 036b32ecc84976b4a86995345c05bd57, type: 2}
+--- !u!114 &1910047802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910047784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3d73a8aa909a1149bcddab5a0465018, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
+  shield: 0
+  maxHealth: 0
+  playersDataBase: {fileID: 11400000, guid: 9fb4dda26fc0c8443917523bbd1f3767, type: 2}
+  playerManagerUI: {fileID: 1576329546}
 --- !u!1 &1973892440
 GameObject:
   m_ObjectHideFlags: 0

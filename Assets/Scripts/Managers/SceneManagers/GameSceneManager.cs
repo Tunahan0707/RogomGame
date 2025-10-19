@@ -55,6 +55,8 @@ public class GameSceneManager : MonoBehaviour
         mainMenuButton.onClick.AddListener(() =>
         {
             SceneManager.LoadScene(Consts.Scenes.MAIN_MENU);
+            FightDataHolder.Instance.SaveDatas();
+            PlayerDataHolder.Instance.SaveDatas();
         });
         roomCountText.text = "1. Oda";
         floorCountText.text = "1. Kat";
@@ -68,6 +70,10 @@ public class GameSceneManager : MonoBehaviour
         gainRoom.SetActive(false);
         restRoom.SetActive(false);
         enemyManager = GetComponent<EnemyManager>();
+    }
+    private void OnEnable()
+    {
+        FightDataHolder.Instance.Equalize();
     }
     private void Start()
     {
