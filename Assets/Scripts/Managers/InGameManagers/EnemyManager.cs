@@ -120,6 +120,8 @@ public class EnemyManager : MonoBehaviour
         OnEnemyDied?.Invoke();
         currentEnemy = null;
         enemyDisplay.DestroyEnemy();
+        currentEnemys = new();
+        EnemyManagerUI.currentEnemys = new();
         TurnManager.currentTurn = TurnManager.Turn.Off;
         TurnManager.endTurnButton1.gameObject.SetActive(false);
     }
