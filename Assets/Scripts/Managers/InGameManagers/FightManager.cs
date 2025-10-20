@@ -21,15 +21,12 @@ public class FightManager : MonoBehaviour
         GameSceneManager.OnRoomEntered -= EnterTheRoom;
     }
 
-    private void Start()
-    {
-        if (GameStartManager.currentGameType == GameType.ContinueGame)
-            enemyManager.SpawnEnemyByID(loadedData.enemyID);
-    }
 
     private void EnterTheRoom()
     {
-        if (RandomRoomSelector.selectedRoom == RoomType.Fight)
+        if (GameStartManager.currentGameType == GameType.ContinueGame)
+            enemyManager.SpawnEnemyByID(loadedData.enemyID);
+        else if (RandomRoomSelector.selectedRoom == RoomType.Fight)
         {
             enemyManager.SelectEnemy(EnemyType.Normal);
         }

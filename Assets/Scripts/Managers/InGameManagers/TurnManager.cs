@@ -64,6 +64,7 @@ public class TurnManager : MonoBehaviour
         endTurnButton1.gameObject.SetActive(false);
         cardManager.DiscardHand();
         isForStart = false;
+        enemyManager.EndTurn();
         StartCoroutine(StartEnemyTurn());
     }
 
@@ -80,7 +81,6 @@ public class TurnManager : MonoBehaviour
 
     private void EndEnemyTurn()
     {
-        enemyManager.EndTurn();
         StartPlayerTurn();
         PlayerManager.Instance.NextTurn();
     }

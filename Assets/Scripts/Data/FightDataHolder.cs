@@ -30,14 +30,15 @@ public class FightDataHolder : MonoBehaviour
         EnemyManager.OnEnemySelected -= Equalize;
     }
 
-    public void Equalize(EnemysSO sO)
+    public void Equalize(EnemyAlgoritmController Ai)
     {
         enemyManager = FindFirstObjectByType<EnemyManager>();
         cardManager = FindFirstObjectByType<CardManager>();
-        ai = enemyManager.enemyDisplay.gameObject.GetComponent<EnemyAlgoritmController>();
+        ai = Ai;
     }
     public void SaveDatas()
     {
+        fightData.enemysCurrentPlan = ai.currentPlan;
         fightData.enemysStrenght = ai.strenght;
         fightData.playersStrenght = PlayerManager.Instance.strenght;
         fightData.enemysResistance = ai.resistance;

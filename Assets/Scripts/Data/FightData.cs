@@ -8,6 +8,7 @@ public class FightData
     public int coin;
     public float currentHP;
     public string enemyID;
+    public int enemysCurrentPlan;
     public int currentEnemyHP;
     public int currentRoomIndex;
     public int currentFloorIndex;

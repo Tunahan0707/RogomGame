@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class EnemyDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -17,15 +18,24 @@ public class EnemyDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     [SerializeField] private Image enemyHealthBar;
     [SerializeField] private Image enemyShieldBar;
     [SerializeField] private Image enemyShieldBar2;
+    [SerializeField] private Transform effectList;
     [SerializeField] private TextMeshProUGUI enemyIntentText;
+    private string enemyID;
+    private HashSet<EffectsDisplay> effectDisplays;
 
     public static Dictionary<string, EnemyDisplay> AllEnemys = new();
 
     public EnemysSO enemyData;
+    [SerializeField] private EffectsDisplayUI effectsUI;
 
     private void Awake()
     {
         enemyManager = FindAnyObjectByType<EnemyManager>();
+        if (AllEnemys == null || AllEnemys.Count == 0)
+            AllEnemys = new();
+        if (effectsUI == null)
+            effectsUI = FindFirstObjectByType<EffectsDisplayUI>();
+        effectDisplays = new();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -45,12 +55,14 @@ public class EnemyDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         {
             enemyNameText.text = enemyData.enemyName;
             enemySprite.sprite = enemyData.artwork;
-            if (!AllEnemys.ContainsKey(enemyData.enemyID))
-                AllEnemys.Add(enemyData.enemyID, this);
             enemyShieldBar2.fillAmount = 0f;
             enemyShieldBar.fillAmount = 0f;
             UpdateHealthDisplay(enemyManager.currentHealth, enemyData.health);
             UpdateShieldDisplay(enemyManager.shield, enemyData.health);
+            if (string.IsNullOrEmpty(enemyID))
+                enemyID = System.Guid.NewGuid().ToString();
+            if (!AllEnemys.ContainsKey(enemyID))
+                AllEnemys.Add(enemyID, this);
         }
     }
     public void ShowIntent(string action, string icon, int value)
@@ -61,12 +73,18 @@ public class EnemyDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             enemyIntentText.text = $"{icon} {action}";
     }
 
+    public string GetEnemyID()
+    {
+        return enemyID;
+    }
+
     public static EnemyDisplay GetEnemyDisplay(string id)
     {
         if (AllEnemys.TryGetValue(id, out var enemy))
             return enemy;
         return null;
     }
+
     public void DestroyEnemy()
     {
         // Önce sözlükten kaldır
@@ -116,5 +134,42 @@ public class EnemyDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         enemyHealthText.text = currentHealth.ToString() + "/" + maxHealth.ToString();
         enemyHealthBar.fillAmount = (float)currentHealth / maxHealth;
+    }
+    public void SetEffects(int iconIndex, int value)
+    {
+        if (effectsUI == null)
+            effectsUI = FindAnyObjectByType<EffectsDisplayUI>();
+
+        if (effectsUI == null)
+        {
+            Debug.LogError("EffectsDisplayUI sahnede yok!");
+            return;
+        }
+
+        // Önce effectDisplays'te var mı diye bak
+        var existingEffect = effectDisplays.FirstOrDefault(e => e.iconIndex == iconIndex);
+
+        if (existingEffect != null)
+        {
+            if (value == 0)
+            {
+                existingEffect.Destroy();
+                effectDisplays.Remove(existingEffect);
+            }
+            else
+            {
+                existingEffect.SetDatas(effectsUI.Icons[iconIndex], value, iconIndex);
+            }
+        }
+        else
+        {
+            // Effect yok ve value 0 değilse yeni spawn et
+            if (value != 0)
+            {
+                var newEffect = effectsUI.SpawnEffect(iconIndex, value, effectList);
+                if (newEffect != null)
+                    effectDisplays.Add(newEffect);
+            }
+        }
     }
 }

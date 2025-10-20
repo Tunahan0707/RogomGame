@@ -30,7 +30,7 @@ public class PlayerManager : MonoBehaviour
             playerManagerUI.SpawnPlayer(playersDataBase.GetPlayerByID(playerData.currentPlayerID));
         else
             playerManagerUI.SpawnPlayer(playersDataBase.startingPlayer);
-        
+
         if (loadedData.playersStrenght == 96963169)
         {
             strenght = playerDisplay.playerData.baseStrenght;
@@ -43,6 +43,7 @@ public class PlayerManager : MonoBehaviour
             resistance = loadedData.playersResistance;
             shield = loadedData.currentPlayerShield;
         }
+        SetEffects();
     }
 
     public void TakeDamage(int amount)
@@ -68,6 +69,12 @@ public class PlayerManager : MonoBehaviour
         playerDisplay.UpdateHealthDisplay(playerHealth, maxHealth);
     }
 
+    private void SetEffects()
+    {
+        playerDisplay.SetEffects(0, resistance);
+        playerDisplay.SetEffects(1, strenght);
+    }
+
     private void Die()
     {
         OnPlayerDied?.Invoke();
@@ -88,26 +95,36 @@ public class PlayerManager : MonoBehaviour
     public void DebuffStrenght(int debuff)
     {
         strenght -= debuff;
+        SetEffects();
+
     }
     public void DebuffResistance(int debuff)
     {
         resistance -= debuff;
+        SetEffects();
     }
     public void BuffStrenght(int buff)
     {
         strenght += buff;
+        SetEffects();
     }
     public void BuffResistance(int buff)
     {
         resistance += buff;
+        SetEffects();
     }
     public void NextTurn()
     {
-        if (strenght != 0)
+        if (strenght > 0)
             strenght -= 1;
-        if (resistance != 0)
+        if (resistance > 0)
             resistance -= 1;
+        if (strenght < 0)
+            strenght += 1;
+        if (resistance < 0)
+            resistance += 1;
         shield = 0;
         playerDisplay.UpdateShieldDisplay(shield, maxHealth);
+        SetEffects();
     }
 }

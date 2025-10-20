@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public static event Action OnEnemyDied;
-    public static event Action<EnemysSO> OnEnemySelected;
+    public static event Action<EnemyAlgoritmController> OnEnemySelected;
     [Header("Enemy Settings")]
     public EnemysSO currentEnemy;
 
@@ -18,6 +18,7 @@ public class EnemyManager : MonoBehaviour
     public int currentHealth;
     public int shield;
 
+    public List<string> currentEnemys;
     private int maxHealth;
 
     private FightData loadedData => FightDataHolder.Instance.fightData;
@@ -43,22 +44,25 @@ public class EnemyManager : MonoBehaviour
         shield = currentEnemy.baseShield;
         if (currentEnemy == null) return;
         enemyManagerUI.SpawnEnemy(currentEnemy);
-        enemyDisplay = EnemyDisplay.GetEnemyDisplay(currentEnemy.enemyID);
-        OnEnemySelected?.Invoke(currentEnemy);
+        currentEnemys.AddRange(EnemyManagerUI.currentEnemys);
+        enemyDisplay = EnemyDisplay.GetEnemyDisplay(currentEnemys[0]);
         var ai = enemyDisplay.GetComponent<EnemyAlgoritmController>();
+        OnEnemySelected?.Invoke(ai);
         ai.DecideNextPlan();
     }
     public void SpawnEnemyByID(string id)
     {
+        enemyDisplay = null;
         currentEnemy = enemiesDataBase.GetEnemyByID(id);
         currentHealth = loadedData.currentEnemyHP;
         maxHealth = currentEnemy.health;
         shield = loadedData.currentEnemyShield;
         enemyManagerUI.SpawnEnemy(currentEnemy);
-        enemyDisplay = EnemyDisplay.GetEnemyDisplay(id);
-        OnEnemySelected?.Invoke(currentEnemy);
+        currentEnemys.AddRange(EnemyManagerUI.currentEnemys);
+        enemyDisplay = EnemyDisplay.GetEnemyDisplay(currentEnemys[0]);
         var ai = enemyDisplay.GetComponent<EnemyAlgoritmController>();
-        ai.DecideNextPlan();
+        OnEnemySelected?.Invoke(ai);
+        ai.UpdateCurrentPlan();
     }
 
 
@@ -95,6 +99,7 @@ public class EnemyManager : MonoBehaviour
     }
     public void AddShield(int addedShield)
     {
+        if (addedShield < 0) return;
         shield += addedShield;
         enemyDisplay.UpdateShieldDisplay(shield, maxHealth);
     }
@@ -119,7 +124,7 @@ public class EnemyManager : MonoBehaviour
         TurnManager.endTurnButton1.gameObject.SetActive(false);
     }
 
-    internal void EndTurn()
+    public void EndTurn()
     {
         shield = 0;
         enemyDisplay.UpdateShieldDisplay(shield, maxHealth);

@@ -6,7 +6,7 @@ public class EnemyAlgoritmController : MonoBehaviour
     private EnemyDisplay display;
     private EnemyManager enemyManager;
 
-    private int currentPlan;
+    public int currentPlan { get; private set; }
     private int damage;
     private int block;
     public int strenght { get; private set; }
@@ -22,10 +22,10 @@ public class EnemyAlgoritmController : MonoBehaviour
         EnemyManager.OnEnemySelected -= Equalize;
     }
 
-    private void Equalize(EnemysSO sO)
+    private void Equalize(EnemyAlgoritmController Ai)
     {
         display = gameObject.GetComponent<EnemyDisplay>();
-        enemyManager = FindAnyObjectByType<EnemyManager>();
+        enemyManager = FindFirstObjectByType<EnemyManager>();
         damage = display.enemyData.damage;
         block = display.enemyData.addingShield;
         if (loadedData.enemysStrenght == 96963169)
@@ -37,7 +37,16 @@ public class EnemyAlgoritmController : MonoBehaviour
         {
             strenght = loadedData.enemysStrenght;
             resistance = loadedData.enemysResistance;
+            currentPlan = loadedData.enemysCurrentPlan;
+            UpdateCurrentPlan();
         }
+        SetEffects();
+    }
+
+    private void SetEffects()
+    {
+        display.SetEffects(0, resistance);
+        display.SetEffects(1, strenght);
     }
 
     /// <summary>
@@ -54,7 +63,6 @@ public class EnemyAlgoritmController : MonoBehaviour
             currentPlan = 2;
         else
             currentPlan = 3;
-
         ShowEnemyIntent(currentPlan);
     }
 
@@ -108,9 +116,11 @@ public class EnemyAlgoritmController : MonoBehaviour
                 {
                     case 0:
                         strenght += display.enemyData.addingStrenght;
+                        SetEffects();
                         break;
                     case 1:
                         resistance += display.enemyData.addingResistnace;
+                        SetEffects();
                         break;
                 }
                 break;
@@ -121,12 +131,12 @@ public class EnemyAlgoritmController : MonoBehaviour
                 switch (y)
                 {
                     case 0:
-                        z = Random.Range(0, 2);
-                        DebuffStrenght(z);
+                        z = Random.Range(1, 3);
+                        PlayerManager.Instance.DebuffStrenght(z);
                         break;
                     case 1:
-                        z = Random.Range(0, 2);
-                        DebuffStrenght(z);
+                        z = Random.Range(1, 3);
+                        PlayerManager.Instance.DebuffResistance(z);
                         break;
                 }
                 break;
@@ -139,14 +149,19 @@ public class EnemyAlgoritmController : MonoBehaviour
             resistance -= 1;
         else if (resistance < 0)
             resistance += 1;
+        SetEffects();
         DecideNextPlan(); // yeni plan belirle
     }
     public void DebuffStrenght(int debuff)
     {
         strenght -= debuff;
+        UpdateCurrentPlan();
+        SetEffects();
     }
     public void DebuffResistance(int debuff)
     {
         resistance -= debuff;
+        UpdateCurrentPlan();
+        SetEffects();
     }
 }

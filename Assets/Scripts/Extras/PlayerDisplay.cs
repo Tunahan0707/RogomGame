@@ -7,6 +7,7 @@ using Unity.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine.Events;
+using System.Linq;
 
 public class PlayerDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -23,6 +24,9 @@ public class PlayerDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] private Image playerShieldBar2;
     [SerializeField] private GameObject healthBar;
     [SerializeField] private Button button;
+    private HashSet<EffectsDisplay> effectDisplays;
+    [SerializeField] private Transform effectList;
+    [SerializeField] private EffectsDisplayUI effectsUI;
 
     public static Dictionary<string, PlayerDisplay> AllPlayers = new();
 
@@ -40,6 +44,7 @@ public class PlayerDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             playerNameText.gameObject.SetActive(false);
         else
             Debug.LogWarning("PlayerDisplay: TextMeshProUGUI not assigned or found.", this);
+        effectDisplays = new();
     }
 
     private void OnClick()
@@ -48,7 +53,7 @@ public class PlayerDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             OnPlayerSelected?.Invoke(playerData);
         }
-            
+
     }
 
     public void SetPlayer(PlayersSO player)
@@ -63,7 +68,7 @@ public class PlayerDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             playerSprite.color = Color.black;
             playerNameText.text = "Bu Karakter Kilitli";
         }
-            
+
         if (!AllPlayers.ContainsKey(playerData.playerID))
             AllPlayers.Add(playerData.playerID, this);
         if (playerManager != null)
@@ -74,7 +79,7 @@ public class PlayerDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             UpdateHealthDisplay(PlayerManager.Instance.playerHealth, playerManager.maxHealth);
         }
     }
-            
+
     public void DestroyOthers()
     {
         Destroy(healthBar);
@@ -105,7 +110,7 @@ public class PlayerDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
         else
             playerShieldBar.fillAmount = x;
-        
+
     }
 
     public void UpdateHealthDisplay(int currentHealth, int maxHealth)
@@ -124,5 +129,43 @@ public class PlayerDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (playerNameText != null)
             playerNameText.gameObject.SetActive(false);
+    }
+
+    public void SetEffects(int iconIndex, int value)
+    {
+        if (effectsUI == null)
+            effectsUI = FindAnyObjectByType<EffectsDisplayUI>();
+
+        if (effectsUI == null)
+        {
+            Debug.LogError("EffectsDisplayUI sahnede yok!");
+            return;
+        }
+
+        // Önce effectDisplays'te var mı diye bak
+        var existingEffect = effectDisplays.FirstOrDefault(e => e.iconIndex == iconIndex);
+
+        if (existingEffect != null)
+        {
+            if (value == 0)
+            {
+                existingEffect.Destroy();
+                effectDisplays.Remove(existingEffect);
+            }
+            else
+            {
+                existingEffect.SetDatas(effectsUI.Icons[iconIndex], value, iconIndex);
+            }
+        }
+        else
+        {
+            // Effect yok ve value 0 değilse yeni spawn et
+            if (value != 0)
+            {
+                var newEffect = effectsUI.SpawnEffect(iconIndex, value, effectList);
+                if (newEffect != null)
+                    effectDisplays.Add(newEffect);
+            }
+        }
     }
 }

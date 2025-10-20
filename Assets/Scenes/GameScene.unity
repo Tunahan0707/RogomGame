@@ -1286,9 +1286,9 @@ RectTransform:
   - {fileID: 671445811}
   m_Father: {fileID: 1089853894}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 280, y: 900}
+  m_AnchorMin: {x: 0, y: 0.8852222}
+  m_AnchorMax: {x: 0, y: 0.8852222}
+  m_AnchoredPosition: {x: 280, y: -56}
   m_SizeDelta: {x: 94.38928, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &434396424
@@ -1647,7 +1647,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.6873959, y: 0.28085187}
   m_AnchorMax: {x: 0.6873959, y: 0.28085187}
-  m_AnchoredPosition: {x: 8.220001, y: 11}
+  m_AnchoredPosition: {x: 42, y: 84}
   m_SizeDelta: {x: 369.55, y: 420}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &593412972
@@ -1745,7 +1745,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.33918887, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.20199966, y: -0.000022888184}
+  m_AnchoredPosition: {x: -0.20199966, y: -0.000030517578}
   m_SizeDelta: {x: 147.31, y: 46.666}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &671445812
@@ -2061,7 +2061,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.3006042, y: 0.28085187}
   m_AnchorMax: {x: 0.3006042, y: 0.28085187}
-  m_AnchoredPosition: {x: -2.5, y: 0}
+  m_AnchoredPosition: {x: -24, y: 61}
   m_SizeDelta: {x: 349, y: 420}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &737720533
@@ -4403,6 +4403,7 @@ GameObject:
   - component: {fileID: 1576329546}
   - component: {fileID: 1576329545}
   - component: {fileID: 1576329547}
+  - component: {fileID: 1576329548}
   m_Layer: 0
   m_Name: UIElements
   m_TagString: Untagged
@@ -4485,7 +4486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e2051dcc953a9a4da07881231ffe8d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManagerUI
-  enemyPrefab: {fileID: 2857081919984160814, guid: c53cbbc20f574644b90c85fd0b4ea61d, type: 3}
+  enemyPrefab: {fileID: 2857081919984160814, guid: 23d7fb499cda2354d9219630c96d93b8, type: 3}
   spawnPoint: {fileID: 593412971}
 --- !u!114 &1576329546
 MonoBehaviour:
@@ -4517,6 +4518,22 @@ MonoBehaviour:
   losePanel: {fileID: 1087337265}
   continueButton: {fileID: 1973892443}
   returnToMainMenuButton: {fileID: 701495355}
+--- !u!114 &1576329548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1576329540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1185ba1caaef7b540a4fcb5fb17e8c95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EffectsDisplayUI
+  prefab: {fileID: 4899079697058798663, guid: 12584d22e9015b34986eceb12e211e08, type: 3}
+  icons:
+  - {fileID: -5266673235490452323, guid: 25e51c370230c7a42a692b3216da8c68, type: 3}
+  - {fileID: 1273358426504498224, guid: 6449cf594c67c2241b76736232e7fa5e, type: 3}
 --- !u!1 &1626016146
 GameObject:
   m_ObjectHideFlags: 0
@@ -5179,6 +5196,7 @@ MonoBehaviour:
   enemyManagerUI: {fileID: 1576329545}
   currentHealth: 0
   shield: 0
+  currentEnemys: []
 --- !u!114 &1910047801
 MonoBehaviour:
   m_ObjectHideFlags: 0

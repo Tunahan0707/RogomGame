@@ -19,13 +19,13 @@ public class CardPlayingController : MonoBehaviour
         EnemyManager.OnEnemySelected -= Equalize;
     }
 
-    private void Equalize(EnemysSO sO)
+    private void Equalize(EnemyAlgoritmController Ai)
     {
         if (enemyManager == null)
             enemyManager = FindFirstObjectByType<EnemyManager>();
         if (playerManager == null)
             playerManager = FindFirstObjectByType<PlayerManager>();
-        ai = enemyManager.enemyDisplay.GetComponent<EnemyAlgoritmController>();
+        ai = Ai;
     }
 
     private void CardPlayed(CardDisplay cardDisplay)

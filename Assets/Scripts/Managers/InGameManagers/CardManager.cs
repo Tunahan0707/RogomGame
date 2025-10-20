@@ -62,6 +62,7 @@ public class CardManager : MonoBehaviour
     {
         if (GameStartManager.currentGameType == GameType.ContinueGame)
         {
+            CardDisplay.AllCards = new();
             foreach (string card in singleUseDrawDeck)
             {
                 var cardData = cardsDataBase.GetCardByID(card);
