@@ -5,13 +5,14 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public static event Action OnEnemyDied;
+    public static event Action<EnemysSO> OnEnemySelected;
     [Header("Enemy Settings")]
     public EnemysSO currentEnemy;
 
     [SerializeField] private EnemiesDataBase enemiesDataBase;
     [SerializeField] private EnemyManagerUI enemyManagerUI;
 
-    private EnemyDisplay enemyDisplay;
+    public EnemyDisplay enemyDisplay { get; private set; }
 
     [HideInInspector] 
     public int currentHealth;
@@ -26,25 +27,38 @@ public class EnemyManager : MonoBehaviour
         if (enemyManagerUI == null)
             enemyManagerUI = FindAnyObjectByType<EnemyManagerUI>();
         if (currentEnemy != null)
+        {
             currentHealth = loadedData.currentEnemyHP;
+            shield = loadedData.currentEnemyShield;
+        }
+
     }
+
 
     public void SelectEnemy(EnemyType type)
     {
         currentEnemy = enemiesDataBase.GetEnemyByType(type);
         currentHealth = currentEnemy.health;
+        maxHealth = currentEnemy.health;
         shield = currentEnemy.baseShield;
         if (currentEnemy == null) return;
         enemyManagerUI.SpawnEnemy(currentEnemy);
         enemyDisplay = EnemyDisplay.GetEnemyDisplay(currentEnemy.enemyID);
+        OnEnemySelected?.Invoke(currentEnemy);
+        var ai = enemyDisplay.GetComponent<EnemyAlgoritmController>();
+        ai.DecideNextPlan();
     }
     public void SpawnEnemyByID(string id)
     {
         currentEnemy = enemiesDataBase.GetEnemyByID(id);
         currentHealth = loadedData.currentEnemyHP;
+        maxHealth = currentEnemy.health;
         shield = loadedData.currentEnemyShield;
         enemyManagerUI.SpawnEnemy(currentEnemy);
         enemyDisplay = EnemyDisplay.GetEnemyDisplay(id);
+        OnEnemySelected?.Invoke(currentEnemy);
+        var ai = enemyDisplay.GetComponent<EnemyAlgoritmController>();
+        ai.DecideNextPlan();
     }
 
 
@@ -69,16 +83,17 @@ public class EnemyManager : MonoBehaviour
         {
             Die();
         }
+        enemyDisplay.UpdateShieldDisplay(shield, maxHealth);
         enemyDisplay.UpdateHealthDisplay(currentHealth, maxHealth);
     }
-    private void Heal(int heal)
+    public void Heal(int heal)
     {
         currentHealth += heal;
         if (currentHealth > maxHealth)
             currentHealth = maxHealth;
         enemyDisplay.UpdateHealthDisplay(currentHealth, maxHealth);
     }
-    private void AddShield(int addedShield)
+    public void AddShield(int addedShield)
     {
         shield += addedShield;
         enemyDisplay.UpdateShieldDisplay(shield, maxHealth);
@@ -100,9 +115,13 @@ public class EnemyManager : MonoBehaviour
         OnEnemyDied?.Invoke();
         currentEnemy = null;
         enemyDisplay.DestroyEnemy();
+        TurnManager.currentTurn = TurnManager.Turn.Off;
+        TurnManager.endTurnButton1.gameObject.SetActive(false);
     }
-    public void EnemyAlgoritm(int x)
+
+    internal void EndTurn()
     {
-        
+        shield = 0;
+        enemyDisplay.UpdateShieldDisplay(shield, maxHealth);
     }
 }

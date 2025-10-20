@@ -13,23 +13,21 @@ public class FightManager : MonoBehaviour
     }
     private void OnEnable()
     {
-        GameSceneManager.OnContinueButtonClicked += HandleContinueButtonClicked;
+        GameSceneManager.OnRoomEntered += EnterTheRoom;
     }
 
     private void OnDisable()
     {
-        GameSceneManager.OnContinueButtonClicked -= HandleContinueButtonClicked;
+        GameSceneManager.OnRoomEntered -= EnterTheRoom;
     }
 
     private void Start()
     {
-        if (GameStartManager.currentGameType == GameType.NewGame)
-            enemyManager.SelectEnemy(EnemyType.Normal);
-        else if (GameStartManager.currentGameType == GameType.ContinueGame)
+        if (GameStartManager.currentGameType == GameType.ContinueGame)
             enemyManager.SpawnEnemyByID(loadedData.enemyID);
     }
 
-    private void HandleContinueButtonClicked()
+    private void EnterTheRoom()
     {
         if (RandomRoomSelector.selectedRoom == RoomType.Fight)
         {

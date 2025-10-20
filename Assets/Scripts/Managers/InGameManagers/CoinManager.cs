@@ -7,10 +7,12 @@ public class CoinManager : MonoBehaviour
 
     [field: SerializeField]
     public static int Coins { get; private set; } = 0;
+    private FightData loadedData => FightDataHolder.Instance.fightData;
 
     private void Awake()
     {
         OnCoinsChanged?.Invoke(Coins);
+        Coins = loadedData.coin;
     }
 
     public void AddCoins(int amount)

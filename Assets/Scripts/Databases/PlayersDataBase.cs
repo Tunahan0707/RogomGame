@@ -4,6 +4,17 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayersDataBase", menuName = "ScriptableObjects/Databases/PlayersDataBase", order = 0)]
 public class PlayersDataBase : ScriptableObject
 {
+    private static PlayersDataBase instance;
+
+    public static PlayersDataBase Instance
+    {
+        get
+        {
+            if (instance == null)
+                instance = Resources.Load<PlayersDataBase>(Consts.FileWays.PlayersDB);
+            return instance;
+        }
+    }
     public List<PlayersSO> players;
     public PlayersSO startingPlayer;
     private void OnEnable()

@@ -10,14 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 08a18ede6c53f234996583def863b07e, type: 3}
-  m_Name: NewCard
+  m_Name: Defence
   m_EditorClassIdentifier: Assembly-CSharp::CardsSO
-  cardName: deneme
-  description: yok
+  cardName: Savun!
+  description: "Klasik savunma kart\u0131.\n5 kalkan kazand\u0131r\u0131r."
   artwork: {fileID: 0}
-  cardType: 0
+  cardType: 3
   cardRarelity: 0
   cost: 1
-  howManyHaveOnStart: 10
-  cardID: 6c0f008b-f94f-424d-acb3-ec3f0302c76c
-  attackValue: 3
+  howManyHaveOnStart: 4
+  cardID: 64cba2e6-b533-4d6d-99af-5e9315e7e7bd
+  attackValue: 0
+  unlockLevel: 0
+  shieldValue: 5
+  healValue: 0
+  isLocked: 0

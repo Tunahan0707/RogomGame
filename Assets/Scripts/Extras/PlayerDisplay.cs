@@ -26,7 +26,7 @@ public class PlayerDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public static Dictionary<string, PlayerDisplay> AllPlayers = new();
 
-    private PlayersSO playerData;
+    public PlayersSO playerData { get; private set; }
 
     private void Awake()
     {
@@ -70,8 +70,8 @@ public class PlayerDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             playerShieldBar2.fillAmount = 0f;
             playerShieldBar.fillAmount = 0f;
-            UpdateShieldDisplay(playerManager.shield, playerManager.maxHealth);
-            UpdateHealthDisplay(PlayerManager.playerHealth, playerManager.maxHealth);
+            UpdateShieldDisplay(PlayerManager.Instance.shield, playerManager.maxHealth);
+            UpdateHealthDisplay(PlayerManager.Instance.playerHealth, playerManager.maxHealth);
         }
     }
             
@@ -89,7 +89,14 @@ public class PlayerDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         float x = (float)currentShield / maxHealth;
         float y;
-        playerShieldText.text = currentShield.ToString();
+        if (currentShield == 0)
+            playerShieldText.gameObject.SetActive(false);
+        else
+        {
+            if (!playerShieldText.gameObject.activeSelf)
+                playerShieldText.gameObject.SetActive(true);
+            playerShieldText.text = currentShield.ToString();
+        }
         if (x >= 1)
         {
             y = x - 1;
@@ -103,7 +110,7 @@ public class PlayerDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void UpdateHealthDisplay(int currentHealth, int maxHealth)
     {
-        playerHealthText.text = currentHealth.ToString();
+        playerHealthText.text = currentHealth.ToString() + "/" + maxHealth.ToString();
         playerHealthBar.fillAmount = (float)currentHealth / maxHealth;
     }
 

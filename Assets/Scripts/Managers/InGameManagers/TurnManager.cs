@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Analytics;
@@ -5,7 +6,7 @@ using UnityEngine.UI;
 
 public class TurnManager : MonoBehaviour
 {
-    public enum Turn { Player, Enemy }
+    public enum Turn { Player, Enemy , Off}
     public static Turn currentTurn = Turn.Player;
     public static bool isForStart = true;
 
@@ -21,7 +22,7 @@ public class TurnManager : MonoBehaviour
 
     public static Button endTurnButton1;
 
-    private int x;
+    private int plan;
 
     private void Awake()
     {
@@ -35,9 +36,7 @@ public class TurnManager : MonoBehaviour
         endTurnButton1.onClick.AddListener(EndPlayerTurn);
         isForStart = true;
         currentTurn = loadedData.turn;
-        if (currentTurn == Turn.Player)
-            StartPlayerTurn();
-        else
+        if (currentTurn == Turn.Enemy)
             StartEnemyTurn();
     }
 
@@ -45,10 +44,17 @@ public class TurnManager : MonoBehaviour
     {
         currentTurn = Turn.Player;
         if (GameStartManager.currentGameType == GameType.NewGame && isForStart)
+        {
             StartCoroutine(cardManager.DrawCards(cardManager.handSize));
+            ManaManager.currentMana = ManaManager.maxMana;
+            ManaManager.Equalize();
+        }  
         if (!isForStart)
+        {
+            ManaManager.currentMana = ManaManager.maxMana;
+            ManaManager.Equalize();
             StartCoroutine(cardManager.DrawCards(cardManager.handSize));
-        x = UnityEngine.Random.Range(0, 7);
+        }   
     }
 
     public void EndPlayerTurn()
@@ -65,14 +71,17 @@ public class TurnManager : MonoBehaviour
     {
         currentTurn = Turn.Enemy;
 
-        yield return new WaitForSeconds(1f);
+        EnemyAlgoritmController ai = FindAnyObjectByType<EnemyAlgoritmController>();
 
-        enemyManager.EnemyAlgoritm(x);
+        if (ai != null)
+            yield return StartCoroutine(ai.ExecuteCurrentPlan());
         EndEnemyTurn();
     }
 
     private void EndEnemyTurn()
     {
+        enemyManager.EndTurn();
         StartPlayerTurn();
+        PlayerManager.Instance.NextTurn();
     }
 }

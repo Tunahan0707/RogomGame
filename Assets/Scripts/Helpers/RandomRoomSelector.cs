@@ -14,12 +14,17 @@ public class RandomRoomSelector : MonoBehaviour
 
     void Awake()
     {
+        Debug.Log(GameStartManager.currentGameType);
+        if (GameStartManager.currentGameType == GameType.ContinueGame) return;
         AddAddableRoomsForGameStart();
-        GameSceneManager.OnContinueButtonClicked += OnContinueButtonClicked;
         AddAddableRoomsForAwake();
         AddAddableRoomsForAwake();
     }
 
+    private void OnEnable()
+    {
+        GameSceneManager.OnContinueButtonClicked += OnContinueButtonClicked;
+    }
     private void OnContinueButtonClicked()
     {
         if (currentRoomIndex <= totalRoomCount)

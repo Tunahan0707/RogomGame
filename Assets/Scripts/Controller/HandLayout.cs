@@ -1,20 +1,22 @@
 using UnityEngine;
 using System.Collections.Generic;
+using DG.Tweening;
 
 public class HandLayout : MonoBehaviour
 {
-    public List<GameObject> handCards = new(); // aktif kart objeleri
     [SerializeField] private float cardSpacing = 150f;
     [SerializeField] private float maxSpread = 800f;
     [SerializeField] private float curveHeight = 80f;
     [SerializeField] private float maxRotation = 15f;
+    [SerializeField] private float layoutAnimDuration = 0.2f;
 
-    public void UpdateHandLayout()
+    public List<GameObject> handCards = new();
+
+    public void UpdateHandLayout(GameObject highlightedCard = null)
     {
         int count = handCards.Count;
         if (count == 0) return;
 
-        // Kart sayısına göre spacing azalt (sıkışma)
         float spacing = cardSpacing;
         float totalWidth = spacing * (count - 1);
         if (totalWidth > maxSpread)
@@ -26,26 +28,27 @@ public class HandLayout : MonoBehaviour
         float startX = -totalWidth / 2f;
 
         for (int i = 0; i < count; i++)
-        {
-            GameObject card = handCards[i];
-            RectTransform rect = card.GetComponent<RectTransform>();
+{
+    GameObject card = handCards[i];
+    RectTransform rect = card.GetComponent<RectTransform>();
 
-            // X konumu
-            float x = (count == 1) ? 0f : startX + i * spacing;
+    float x = (count == 1) ? 0f : startX + i * spacing;
+    float normalizedX = (totalWidth == 0) ? 0 : x / (totalWidth / 2f);
+    float y = curveHeight * (1 - normalizedX * normalizedX);
 
-            // Y konumu (kavis)
-            float normalizedX = (totalWidth == 0) ? 0 : x / (totalWidth / 2f);
-            float y = curveHeight * (1 - normalizedX * normalizedX);
-            rect.anchoredPosition = new Vector2(x, y);
+    // Rotation güvenli şekilde hesaplanıyor
+    float rotation = 0f;
+    if (Mathf.Abs(totalWidth) > Mathf.Epsilon)
+        rotation = -(x / (totalWidth / 2f)) * maxRotation;
 
+    // Eğer hover edilen kartsa biraz yukarı çıkar
+    if (card == highlightedCard)
+        y += 60f;
 
-            // Rotation
-            float rotation = 0f;
-            if (totalWidth != 0f)
-                rotation = -(x / (totalWidth / 2f)) * maxRotation;
+    rect.DOAnchorPos(new Vector2(x, y), layoutAnimDuration).SetEase(Ease.OutCubic);
+    rect.DOLocalRotateQuaternion(Quaternion.Euler(0, 0, rotation), layoutAnimDuration).SetEase(Ease.OutCubic);
+}
 
-            rect.localRotation = Quaternion.Euler(0, 0, rotation);
-        }
     }
 
     public void AddCard(GameObject card)
@@ -56,12 +59,8 @@ public class HandLayout : MonoBehaviour
 
     public void RemoveCard(GameObject card)
     {
-        handCards.Remove(card);
-        UpdateHandLayout();
-    }
-    public void ClearHand()
-    {
-        handCards.Clear();
+        if (handCards.Contains(card))
+            handCards.Remove(card);
         UpdateHandLayout();
     }
 }

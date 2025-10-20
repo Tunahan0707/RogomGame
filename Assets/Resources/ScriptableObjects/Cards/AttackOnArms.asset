@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08a18ede6c53f234996583def863b07e, type: 3}
+  m_Name: AttackOnArms
+  m_EditorClassIdentifier: Assembly-CSharp::CardsSO
+  cardName: "Kollara sald\u0131r!"
+  description: "Rakibinin kollar\u0131na sald\u0131r\u0131rs\u0131n ve rakibin 1
+    g\xFC\xE7 kaybeder."
+  artwork: {fileID: 0}
+  cardType: 1
+  cardRarelity: 1
+  cost: 0
+  howManyHaveOnStart: 0
+  cardID: c4687140-9891-414b-957e-c19e41a3ca8d
+  attackValue: 1
+  unlockLevel: 0
+  shieldValue: 0
+  healValue: 0
+  addingResistnace: 0
+  addingStrenght: 0
+  debuffingEnemysStrenght: 1
+  debuffingEnemysResistance: 0
+  isLocked: 0

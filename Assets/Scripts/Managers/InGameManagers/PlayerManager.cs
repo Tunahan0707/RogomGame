@@ -3,10 +3,14 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
+    public static PlayerManager Instance;
     public static event Action OnPlayerDied;
-    public static int playerHealth;
-    public int shield;
-    public int maxHealth;
+    public int playerHealth { get; private set; }
+    public int shield { get; private set; }
+    public int strenght { get; private set; }
+    public int resistance { get; private set; }
+    public int maxHealth { get; private set; }
+
     [SerializeField] private PlayersDataBase playersDataBase;
     [HideInInspector] public static PlayerDisplay playerDisplay;
     [SerializeField] private PlayerManagerUI playerManagerUI;
@@ -15,8 +19,10 @@ public class PlayerManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
         maxHealth = Mathf.RoundToInt(playerData.maxHP);
-        if (loadedData.currentHP == 0)
+        if (loadedData.currentHP == 96963169)
             playerHealth = maxHealth;
         else
             playerHealth = Mathf.RoundToInt(loadedData.currentHP);
@@ -24,6 +30,19 @@ public class PlayerManager : MonoBehaviour
             playerManagerUI.SpawnPlayer(playersDataBase.GetPlayerByID(playerData.currentPlayerID));
         else
             playerManagerUI.SpawnPlayer(playersDataBase.startingPlayer);
+        
+        if (loadedData.playersStrenght == 96963169)
+        {
+            strenght = playerDisplay.playerData.baseStrenght;
+            shield = playerDisplay.playerData.baseShield;
+            resistance = playerDisplay.playerData.baseResistance;
+        }
+        else
+        {
+            strenght = loadedData.playersStrenght;
+            resistance = loadedData.playersResistance;
+            shield = loadedData.currentPlayerShield;
+        }
     }
 
     public void TakeDamage(int amount)
@@ -54,16 +73,41 @@ public class PlayerManager : MonoBehaviour
         OnPlayerDied?.Invoke();
     }
 
-    private void Heal(int heal)
+    public void Heal(int heal)
     {
         playerHealth += heal;
         if (playerHealth > maxHealth)
             playerHealth = maxHealth;
         playerDisplay.UpdateHealthDisplay(playerHealth, maxHealth);
     }
-    private void AddShield(int addedShield)
+    public void AddShield(int addedShield)
     {
-        shield += addedShield;
+        shield += addedShield + resistance;
+        playerDisplay.UpdateShieldDisplay(shield, maxHealth);
+    }
+    public void DebuffStrenght(int debuff)
+    {
+        strenght -= debuff;
+    }
+    public void DebuffResistance(int debuff)
+    {
+        resistance -= debuff;
+    }
+    public void BuffStrenght(int buff)
+    {
+        strenght += buff;
+    }
+    public void BuffResistance(int buff)
+    {
+        resistance += buff;
+    }
+    public void NextTurn()
+    {
+        if (strenght != 0)
+            strenght -= 1;
+        if (resistance != 0)
+            resistance -= 1;
+        shield = 0;
         playerDisplay.UpdateShieldDisplay(shield, maxHealth);
     }
 }

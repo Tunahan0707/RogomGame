@@ -6,9 +6,12 @@ public class PlayersSO : ScriptableObject, IGameObject
 {
     public string playersName;
     public Sprite playerSprite;
-    public int health;
-    public int inStartCoins;
-    public int baseShield;
+    public int health = 100;
+    public int inStartCoins = 0;
+    public int baseShield = 0;
+    public int baseStrenght = 0;
+    public int baseResistance = 0;
+    public int maxMana = 3;
     public bool isLocked;
     public int unlockLevel;
     [HideInInspector] public string playerID;

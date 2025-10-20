@@ -85,6 +85,7 @@ public class CardManagerUI : MonoBehaviour
         var cardGO = cardDisplay.gameObject;
         cardGO.transform.SetParent(drawDeckParent, false);
         cardGO.SetActive(false);
+        handLayout.RemoveCard(cardGO);
     }
 
     public void UpdateHandUI(string card)

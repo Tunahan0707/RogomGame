@@ -12,11 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d6781d2809233c4da5b6d95a8188459, type: 3}
   m_Name: StartEnemey1
   m_EditorClassIdentifier: Assembly-CSharp::EnemysSO
-  enemyName: adas
-  health: 99
-  damage: 3
+  enemyName: Klass Eleman
+  health: 23
+  damage: 10
+  baseShield: 15
+  addingShield: 9
+  baseStrenght: 1
+  addingStrenght: 2
+  baseResistance: -1
+  addingResistnace: 3
   artwork: {fileID: 0}
   enemyType: 2
+  isLocked: 0
+  unlockLevel: 0
   specialAbilities: []
   coinGive: 1
   experienceGive: 1

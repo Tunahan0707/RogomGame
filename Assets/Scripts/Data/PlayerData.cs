@@ -10,6 +10,7 @@ public class PlayerData
     public int xp;
     public float maxHP;
     public float extraHP;
+    public int extraMana;
     public string currentPlayerID;
 
     public PlayerData()

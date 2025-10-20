@@ -17,6 +17,12 @@ MonoBehaviour:
   health: 100
   inStartCoins: 0
   baseShield: 0
+  baseStrenght: 0
+  baseResistance: 0
+  maxMana: 3
   isLocked: 0
+  unlockLevel: 0
   playerID: 52481076-7774-4867-ab4b-60e75a065078
-  extraStartingCards: []
+  extraStartingCards:
+  - {fileID: 11400000, guid: cc90e950fce8ddd40822971fc4bb246c, type: 2}
+  - {fileID: 11400000, guid: e0a3d9e35b68e5f41856c166d4b10794, type: 2}

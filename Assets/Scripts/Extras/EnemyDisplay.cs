@@ -17,10 +17,11 @@ public class EnemyDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     [SerializeField] private Image enemyHealthBar;
     [SerializeField] private Image enemyShieldBar;
     [SerializeField] private Image enemyShieldBar2;
+    [SerializeField] private TextMeshProUGUI enemyIntentText;
 
     public static Dictionary<string, EnemyDisplay> AllEnemys = new();
 
-    private EnemysSO enemyData;
+    public EnemysSO enemyData;
 
     private void Awake()
     {
@@ -52,6 +53,13 @@ public class EnemyDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             UpdateShieldDisplay(enemyManager.shield, enemyData.health);
         }
     }
+    public void ShowIntent(string action, string icon, int value)
+    {
+        if (value > 0)
+            enemyIntentText.text = $"{icon} {action} {value}";
+        else
+            enemyIntentText.text = $"{icon} {action}";
+    }
 
     public static EnemyDisplay GetEnemyDisplay(string id)
     {
@@ -61,13 +69,38 @@ public class EnemyDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     }
     public void DestroyEnemy()
     {
+        // Önce sözlükten kaldır
+        if (AllEnemys.ContainsValue(this))
+        {
+            string keyToRemove = null;
+            foreach (var kvp in AllEnemys)
+            {
+                if (kvp.Value == this)
+                {
+                    keyToRemove = kvp.Key;
+                    break;
+                }
+            }
+            if (keyToRemove != null)
+                AllEnemys.Remove(keyToRemove);
+        }
+
+        // Sonra objeyi sahneden sil
         Destroy(gameObject);
     }
+
     public void UpdateShieldDisplay(int currentShield, int maxHealth)
     {
         float x = (float)currentShield / maxHealth;
         float y;
-        enemyShieldText.text = currentShield.ToString();
+        if (currentShield == 0)
+            enemyShieldText.gameObject.SetActive(false);
+        else
+        {
+            if (!enemyShieldText.gameObject.activeSelf)
+                enemyShieldText.gameObject.SetActive(true);
+            enemyShieldText.text = currentShield.ToString();
+        }
         if (x >= 1)
         {
             y = x - 1;
@@ -81,7 +114,7 @@ public class EnemyDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void UpdateHealthDisplay(int currentHealth, int maxHealth)
     {
-        enemyHealthText.text = currentHealth.ToString();
+        enemyHealthText.text = currentHealth.ToString() + "/" + maxHealth.ToString();
         enemyHealthBar.fillAmount = (float)currentHealth / maxHealth;
     }
 }

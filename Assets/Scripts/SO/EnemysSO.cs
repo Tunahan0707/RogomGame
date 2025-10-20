@@ -7,9 +7,14 @@ public class EnemysSO : ScriptableObject, IGameObject
 {
     [Header("Enemy Info")]
     public string enemyName;
-    public int health;
+    public int health = 100;
     public int damage;
     public int baseShield = 0;
+    public int addingShield = 6;
+    public int baseStrenght = 0;
+    public int addingStrenght;
+    public int baseResistance = 0;
+    public int addingResistnace;
     public Sprite artwork;
     public EnemyType enemyType;
     public bool isLocked;

@@ -23,8 +23,10 @@ public class CardManager : MonoBehaviour
 
     [SerializeField] private CardsDataBase cardsDataBase;
 
-    public void OnEnable()
+    private void OnEnable()
     {
+        EnemyManager.OnEnemyDied += DeckAllCards;
+        PlayerManager.OnPlayerDied += DeckAllCards;
         deck = new(loadedData.deck);
         drawDeck = new();
         hand = new();
@@ -33,6 +35,27 @@ public class CardManager : MonoBehaviour
         singleUseHand = new(loadedData.hand);
         singleUseDrawDeck = new(loadedData.drawDeck);
         LoadDeck();
+    }
+    private void OnDisable()
+    {
+        EnemyManager.OnEnemyDied -= DeckAllCards;
+        PlayerManager.OnPlayerDied -= DeckAllCards;
+    }
+
+    private void DeckAllCards()
+    {
+        foreach (string card in hand)
+        {
+            drawDeck.Add(card);
+            CardManagerUI.Instance.UpdateDrawDeckUI(card);
+        }
+        foreach (string card in discardPile)
+        {
+            drawDeck.Add(card);
+            CardManagerUI.Instance.UpdateDrawDeckUI(card);
+        }
+        hand.Clear();
+        discardPile.Clear();
     }
 
     private void LoadDeck()
@@ -85,8 +108,7 @@ public class CardManager : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
             if (drawDeck.Count == 0)
             {
-                StartCoroutine(ShuffleDiscardIntoDeck());
-                yield break;
+                yield return StartCoroutine(ShuffleDiscardIntoDeck());
             }
 
             if (drawDeck.Count == 0) break; // Yoksa çık
@@ -122,7 +144,6 @@ public class CardManager : MonoBehaviour
             discardPile.Remove(card);
         }
         ShuffleDeck(drawDeck);
-        StartCoroutine(DrawCards(handSize));
     }
 
     public static void ShuffleDeck(List<string> deck)

@@ -46,4 +46,8 @@ public class Consts
     {
 
     }
+    public struct CardNames
+    {
+        
+    }
 }

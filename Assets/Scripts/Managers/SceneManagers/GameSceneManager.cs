@@ -35,6 +35,7 @@ public class GameSceneManager : MonoBehaviour
     private int room;
 
     public static event Action OnContinueButtonClicked;
+    public static event Action OnRoomEntered;
     private EnemyManager enemyManager;
 
     private TurnManager turnManager => GetComponent<TurnManager>();
@@ -71,10 +72,7 @@ public class GameSceneManager : MonoBehaviour
         restRoom.SetActive(false);
         enemyManager = GetComponent<EnemyManager>();
     }
-    private void OnEnable()
-    {
-        FightDataHolder.Instance.Equalize();
-    }
+
     private void Start()
     {
         EnterRoom(currentRoomType);
@@ -88,8 +86,7 @@ public class GameSceneManager : MonoBehaviour
     }
 
     private void ContinueButtonClicked()
-    {
-        bool isFirstRoom = (room == 1 && floor == 1);
+    {  
         OnContinueButtonClicked?.Invoke();
         room = RandomRoomSelector.currentRoomIndex;
         floor = RandomRoomSelector.currentFloorIndex;
@@ -97,9 +94,7 @@ public class GameSceneManager : MonoBehaviour
         roomCountText.text = room + ". Oda";
         floorCountText.text = floor + ". Kat";
         FightDataHolder.Instance.SaveDatas();
-        if (isFirstRoom) { return; }
         EnterRoom(currentRoomType);
-
     }
     private void EnterRoom(RoomType roomType)
     {
@@ -111,28 +106,28 @@ public class GameSceneManager : MonoBehaviour
         yield return StartCoroutine(FadeManager.Instance.FadeOut());
 
         // 2. Oda aktifliklerini ayarla
-        fightRoom.SetActive(roomType == RoomType.Fight || roomType == RoomType.MiniBoss || roomType == RoomType.Boss);
         marketRoom.SetActive(roomType == RoomType.Market);
         upgradeRoom.SetActive(roomType == RoomType.CardUpgrade);
         gainRoom.SetActive(roomType == RoomType.GainOz || roomType == RoomType.CardChoice);
         restRoom.SetActive(roomType == RoomType.RestRoom);
+        
 
         // 3. Gösterilecek mi? Sadece fight odalarında animasyon
         bool isFightRoom = roomType == RoomType.Fight || roomType == RoomType.MiniBoss || roomType == RoomType.Boss;
         float targetY = isFightRoom ? onFightYValue : offFightYValue;
-
+        continueButton.gameObject.SetActive(!isFightRoom);
         if (isFightRoom)
         {
-            // Background'u önce aşağıya koy (offFightYValue) → sonra yukarıya animasyonla çıkart
             background.transform.localPosition = new Vector3(
-                background.transform.localPosition.x,
-                offFightYValue,
-                background.transform.localPosition.z);
+            background.transform.localPosition.x,
+            offFightYValue,
+            background.transform.localPosition.z);
 
             // Fade açılırken yukarıya hareket etsin
-            StartCoroutine(FadeManager.Instance.FadeIn());
+            yield return StartCoroutine(FadeManager.Instance.FadeIn());
             background.transform.DOLocalMoveY(onFightYValue, animationDuration).SetEase(Ease.OutCubic);
-            yield return new WaitForSeconds(animationDuration);
+            fightRoom.SetActive(isFightRoom);
+            turnManager.StartPlayerTurn();
         }
         else
         {
@@ -140,7 +135,7 @@ public class GameSceneManager : MonoBehaviour
             background.transform.DOLocalMoveY(targetY, 0f);
             yield return StartCoroutine(FadeManager.Instance.FadeIn());
         }
-        
+        OnRoomEntered?.Invoke();
     }
 
 

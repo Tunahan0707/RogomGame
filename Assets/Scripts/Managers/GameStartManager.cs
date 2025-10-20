@@ -4,6 +4,16 @@ using UnityEngine.SceneManagement;
 public class GameStartManager : MonoBehaviour
 {
     public static GameType currentGameType;
+    PlayerData loadedData;
+    private void Awake()
+    {
+        if (!SaveManager.SaveExists(Consts.FileNames.PlayerDataFile))
+        {
+            loadedData = new();
+            return;
+        }
+        loadedData = SaveManager.Load<PlayerData>(Consts.FileNames.PlayerDataFile);
+    }
     public void NewGame()
     {
         SaveManager.DeleteSave(Consts.FileNames.FightDataFile);
@@ -18,6 +28,16 @@ public class GameStartManager : MonoBehaviour
                 newFightData.deck.Add(card.cardID);
             }
         }
+        PlayersSO player;
+        if (loadedData.currentPlayerID != null)
+            player = PlayersDataBase.Instance.GetPlayerByID(loadedData.currentPlayerID);
+        else
+            player = PlayersDataBase.Instance.startingPlayer;
+        foreach (var card in player.extraStartingCards)
+        {
+            newFightData.deck.Add(card.cardID);
+        }
+        
 
         // Kaydet
         SaveManager.Save(newFightData, Consts.FileNames.FightDataFile);
@@ -41,7 +61,6 @@ public class GameStartManager : MonoBehaviour
         }
 
         // Kaydı yükle
-        PlayerData loadedData = SaveManager.Load<PlayerData>(Consts.FileNames.PlayerDataFile);
         FightData loadedFightData = SaveManager.Load<FightData>(Consts.FileNames.FightDataFile);
 
         var holder = FindFirstObjectByType<PlayerDataHolder>();

@@ -37,6 +37,7 @@ public class PlayerDataHolder : MonoBehaviour
     {
         playerData.level++;
         playerData.extraHP += playerData.extraHP * playerData.level * 0.6f + 5;
+        playerData.extraMana += Mathf.RoundToInt((playerData.level + 1) * 0.1f);
         UnlockALL();
         SaveDatas();
     }
@@ -65,7 +66,7 @@ public class PlayerDataHolder : MonoBehaviour
             playerData.currentPlayerID = CharacterSceneManager.currentPlayer.playerID;
         if (playerData.currentPlayerID == null)
             playerData.currentPlayerID = pDB.startingPlayer.playerID;
-        playerData.maxHP = Mathf.RoundToInt(pDB.GetPlayerByID(playerData.currentPlayerID).health + playerData.extraHP);
+        playerData.maxHP = Mathf.RoundToInt(PlayersDataBase.Instance.GetPlayerByID(playerData.currentPlayerID).health + playerData.extraHP);
         Save();
     }
     public void Save()
