@@ -3,30 +3,21 @@ using UnityEngine;
 
 public class CardPlayingController : MonoBehaviour
 {
-    private EnemyManager enemyManager;
-    private PlayerManager playerManager;
+    private EnemyManager enemyManager => EnemyManager.Instance;
+    private PlayerManager playerManager => PlayerManager.Instance;
     private EnemyAlgoritmController ai;
 
 
     private void OnEnable()
     {
         CardDisplay.OnCardClicked += CardPlayed;
-        EnemyManager.OnEnemySelected += Equalize;
+        EnemyManager.OnEnemySelected += (AI) => ai = AI;
     }
     private void OnDisable()
     {
-        CardDisplay.OnCardClicked -= CardPlayed;
-        EnemyManager.OnEnemySelected -= Equalize;
+        CardDisplay.OnCardClicked -= CardPlayed;;
     }
 
-    private void Equalize(EnemyAlgoritmController Ai)
-    {
-        if (enemyManager == null)
-            enemyManager = FindFirstObjectByType<EnemyManager>();
-        if (playerManager == null)
-            playerManager = FindFirstObjectByType<PlayerManager>();
-        ai = Ai;
-    }
 
     private void CardPlayed(CardDisplay cardDisplay)
     {

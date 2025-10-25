@@ -164,4 +164,10 @@ public class EnemyAlgoritmController : MonoBehaviour
         UpdateCurrentPlan();
         SetEffects();
     }
+    public void Save()
+    {
+        loadedData.enemysCurrentPlan = currentPlan;
+        loadedData.enemysResistance = resistance;
+        loadedData.enemysStrenght = strenght;
+    }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
+    public static EnemyManager Instance { get; private set; }
     public static event Action OnEnemyDied;
     public static event Action<EnemyAlgoritmController> OnEnemySelected;
     [Header("Enemy Settings")]
@@ -15,8 +16,8 @@ public class EnemyManager : MonoBehaviour
     public EnemyDisplay enemyDisplay { get; private set; }
 
     [HideInInspector] 
-    public int currentHealth;
-    public int shield;
+    public int currentHealth { get; private set; }
+    public int shield { get; private set; }
 
     public List<string> currentEnemys;
     private int maxHealth;
@@ -25,6 +26,10 @@ public class EnemyManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
         if (enemyManagerUI == null)
             enemyManagerUI = FindAnyObjectByType<EnemyManagerUI>();
         if (currentEnemy != null)
@@ -103,18 +108,6 @@ public class EnemyManager : MonoBehaviour
         shield += addedShield;
         enemyDisplay.UpdateShieldDisplay(shield, maxHealth);
     }
-    public string GetEnemyID()
-    {
-        return currentEnemy != null ? currentEnemy.enemyID : "0";
-    }
-    public int GetEnemyHealth()
-    {
-        return currentHealth;
-    }
-    public int GetEnemyShield()
-    {
-        return shield;
-    }
     private void Die()
     {
         OnEnemyDied?.Invoke();
@@ -122,7 +115,7 @@ public class EnemyManager : MonoBehaviour
         enemyDisplay.DestroyEnemy();
         currentEnemys = new();
         EnemyManagerUI.currentEnemys = new();
-        TurnManager.currentTurn = TurnManager.Turn.Off;
+        TurnManager.currentTurn = Turn.Off;
         TurnManager.endTurnButton1.gameObject.SetActive(false);
     }
 
@@ -130,5 +123,12 @@ public class EnemyManager : MonoBehaviour
     {
         shield = 0;
         enemyDisplay.UpdateShieldDisplay(shield, maxHealth);
+    }
+
+    public void Save()
+    {
+        loadedData.currentEnemyHP = currentHealth;
+        loadedData.enemyID = currentEnemy.ID;
+        loadedData.currentEnemyShield = shield;
     }
 }

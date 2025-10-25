@@ -5,8 +5,6 @@ public class FightDataHolder : MonoBehaviour
     public static FightDataHolder Instance { get; private set; }
 
     public FightData fightData;
-    private EnemyManager enemyManager;
-    private CardManager cardManager;
     private EnemyAlgoritmController ai;
     private void Awake()
     {
@@ -32,36 +30,25 @@ public class FightDataHolder : MonoBehaviour
 
     public void Equalize(EnemyAlgoritmController Ai)
     {
-        enemyManager = FindFirstObjectByType<EnemyManager>();
-        cardManager = FindFirstObjectByType<CardManager>();
         ai = Ai;
     }
     public void SaveDatas()
     {
-        fightData.enemysCurrentPlan = ai.currentPlan;
-        fightData.enemysStrenght = ai.strenght;
-        fightData.playersStrenght = PlayerManager.Instance.strenght;
-        fightData.enemysResistance = ai.resistance;
-        fightData.playersResistance = PlayerManager.Instance.resistance;
-        fightData.enemyID = enemyManager.GetEnemyID();
+        ai.Save();
+        CardManager.Instance.Save();
+        EnemyManager.Instance.Save();
+        PlayerManager.Instance.Save();
         fightData.currentRoomIndex = RandomRoomSelector.currentRoomIndex;
         fightData.currentFloorIndex = RandomRoomSelector.currentFloorIndex;
         fightData.currentRoomType = RandomRoomSelector.selectedRoom;
-        fightData.currentEnemyHP = enemyManager.GetEnemyHealth();
-        fightData.currentEnemyShield = enemyManager.GetEnemyShield();
-        fightData.currentHP = PlayerManager.Instance.playerHealth;
-        fightData.coin = CoinManager.GetCurrentCoins();
-        fightData.turn = TurnManager.currentTurn;
         fightData.currentMana = ManaManager.currentMana;
-        fightData.currentPlayerShield = PlayerManager.Instance.shield;
-        fightData.deck = cardManager.GetCurrent(Consts.ListNames.DECK);
-        fightData.drawDeck = cardManager.GetCurrent(Consts.ListNames.DRAW_DECK);
-        fightData.discardPile = cardManager.GetCurrent(Consts.ListNames.DISCARD_PILE);
-        fightData.hand = cardManager.GetCurrent(Consts.ListNames.HAND);
+        fightData.coin = CoinManager.Coins;
+        fightData.turn = TurnManager.currentTurn;
         Save();
     }
     private void Save()
     {
+        fightData.isNewSave = false;
         SaveManager.Save<FightData>(fightData, Consts.FileNames.FightDataFile);
     }
 }

@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class CardManager : MonoBehaviour
 {
+    public static CardManager Instance;
 
     [Header("Card Lists")]
     public List<string> drawDeck;
@@ -23,10 +24,25 @@ public class CardManager : MonoBehaviour
 
     [SerializeField] private CardsDataBase cardsDataBase;
 
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
     private void OnEnable()
     {
         EnemyManager.OnEnemyDied += DeckAllCards;
         PlayerManager.OnPlayerDied += DeckAllCards;
+    }
+    private void OnDisable()
+    {
+        EnemyManager.OnEnemyDied -= DeckAllCards;
+        PlayerManager.OnPlayerDied -= DeckAllCards;
+    }
+    private void Start()
+    {
         deck = new(loadedData.deck);
         drawDeck = new();
         hand = new();
@@ -34,12 +50,7 @@ public class CardManager : MonoBehaviour
         singleUseDiscardPile = new(loadedData.discardPile);
         singleUseHand = new(loadedData.hand);
         singleUseDrawDeck = new(loadedData.drawDeck);
-        LoadDeck();
-    }
-    private void OnDisable()
-    {
-        EnemyManager.OnEnemyDied -= DeckAllCards;
-        PlayerManager.OnPlayerDied -= DeckAllCards;
+        LoadDeck();   
     }
 
     private void DeckAllCards()
@@ -60,7 +71,7 @@ public class CardManager : MonoBehaviour
 
     private void LoadDeck()
     {
-        if (GameStartManager.currentGameType == GameType.ContinueGame)
+        if (!loadedData.isNewSave)
         {
             CardDisplay.AllCards = new();
             foreach (string card in singleUseDrawDeck)
@@ -85,7 +96,7 @@ public class CardManager : MonoBehaviour
             hand.AddRange(CardManagerUI.handCardIDs);
             drawDeck.AddRange(CardManagerUI.deckCardIDs);
         }
-        else if (GameStartManager.currentGameType == GameType.NewGame)
+        else
             InitializeDeck();
     }
 
@@ -155,33 +166,11 @@ public class CardManager : MonoBehaviour
             (deck[i], deck[randomIndex]) = (deck[randomIndex], deck[i]);
         }
     }
-    public List<string> GetCurrent(string listName)
+    public void Save()
     {
-        List<string> currentList = new();
-        List<string> x = new();
-        if (listName == Consts.ListNames.DECK)
-            currentList = deck;
-        else if (listName == Consts.ListNames.DRAW_DECK)
-            x = drawDeck;
-        else if (listName == Consts.ListNames.HAND)
-            x = hand;
-        else if (listName == Consts.ListNames.DISCARD_PILE)
-            x = discardPile;
-        foreach (string card in x)
-        {
-            if (card == null)
-            {
-                Debug.LogWarning(card + " Bulunamadı!!");
-                continue;
-            }
-            string cardID = CardDisplay.GetCardID(card);
-            if (cardID == null)
-            {
-                Debug.LogWarning(cardID + " Bulunamadı!!");
-                continue;
-            }
-            currentList.Add(cardID);
-        }
-        return currentList;
+        loadedData.deck = deck;
+        loadedData.drawDeck = drawDeck;
+        loadedData.discardPile = discardPile;
+        loadedData.hand = hand;
     }
 }

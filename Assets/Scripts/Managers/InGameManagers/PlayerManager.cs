@@ -1,9 +1,10 @@
 using System;
+using NUnit.Framework;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public static PlayerManager Instance;
+    public static PlayerManager Instance { get; private set; }
     public static event Action OnPlayerDied;
     public int playerHealth { get; private set; }
     public int shield { get; private set; }
@@ -21,28 +22,28 @@ public class PlayerManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
-        maxHealth = Mathf.RoundToInt(playerData.maxHP);
-        if (loadedData.currentHP == 96963169)
-            playerHealth = maxHealth;
         else
-            playerHealth = Mathf.RoundToInt(loadedData.currentHP);
-        if (playerData.currentPlayerID != null)
-            playerManagerUI.SpawnPlayer(playersDataBase.GetPlayerByID(playerData.currentPlayerID));
-        else
-            playerManagerUI.SpawnPlayer(playersDataBase.startingPlayer);
-
-        if (loadedData.playersStrenght == 96963169)
+            Destroy(gameObject);
+        maxHealth = Mathf.RoundToInt(playerData.maxHP + playerData.extraHP);
+        if (loadedData.isNewSave)
         {
+            playerHealth = maxHealth;
             strenght = playerDisplay.playerData.baseStrenght;
             shield = playerDisplay.playerData.baseShield;
             resistance = playerDisplay.playerData.baseResistance;
+            
         }
         else
         {
+            playerHealth = Mathf.RoundToInt(loadedData.currentHP);
             strenght = loadedData.playersStrenght;
             resistance = loadedData.playersResistance;
             shield = loadedData.currentPlayerShield;
         }
+        if (playerData.currentPlayerID != null)
+            playerManagerUI.SpawnPlayer(playersDataBase.GetPlayerByID(playerData.currentPlayerID));
+        else
+            playerManagerUI.SpawnPlayer(playersDataBase.startingPlayer);
         SetEffects();
     }
 
@@ -126,5 +127,12 @@ public class PlayerManager : MonoBehaviour
         shield = 0;
         playerDisplay.UpdateShieldDisplay(shield, maxHealth);
         SetEffects();
+    }
+    public void Save()
+    {
+        loadedData.playersStrenght = strenght;
+        loadedData.playersResistance = resistance;
+        loadedData.currentHP = playerHealth;
+        loadedData.currentPlayerShield = shield;
     }
 }

@@ -32,8 +32,4 @@ public class CoinManager : MonoBehaviour
         Debug.Log("Not enough coins!");
         return false;
     }
-    public static int GetCurrentCoins()
-    {
-        return Coins;
-    }
 }

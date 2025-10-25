@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 
 public class GameStartManager : MonoBehaviour
 {
-    public static GameType currentGameType;
     PlayerData loadedData;
     private void Awake()
     {
@@ -48,7 +47,6 @@ public class GameStartManager : MonoBehaviour
             holder.fightData = newFightData;
 
         SceneManager.LoadScene(Consts.Scenes.GAME);
-        currentGameType = GameType.NewGame;
     }
 
     public void ContinueGame()
@@ -70,6 +68,5 @@ public class GameStartManager : MonoBehaviour
         if (fightHolder != null)
             fightHolder.fightData = loadedFightData;
         SceneManager.LoadScene(Consts.Scenes.GAME);
-        currentGameType = GameType.ContinueGame;
     }
 }

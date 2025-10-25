@@ -4,15 +4,16 @@ using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.UI;
 
+public enum Turn { Player, Enemy, Off }
+
 public class TurnManager : MonoBehaviour
 {
-    public enum Turn { Player, Enemy , Off}
+    public static event Action OnPlayerTurnStarted;
+    public static event Action OnEnemyTurnStarted;
+
     public static Turn currentTurn = Turn.Player;
     public static bool isForStart = true;
 
-    [Header("Managers")]
-    public CardManager cardManager;
-    public EnemyManager enemyManager;
 
     private FightData loadedData => FightDataHolder.Instance.fightData;
 
@@ -22,13 +23,36 @@ public class TurnManager : MonoBehaviour
 
     public static Button endTurnButton1;
 
-    private int plan;
+    private EnemyAlgoritmController ai;
+
+    public static void TriggerPlayerTurnStart() => OnPlayerTurnStarted?.Invoke();
+    public static void TriggerEnemyTurnStart() => OnEnemyTurnStarted?.Invoke();
+
 
     private void Awake()
     {
-        cardManager = FindObjectsByType<CardManager>(FindObjectsSortMode.None)[0];
-        enemyManager = FindObjectsByType<EnemyManager>(FindObjectsSortMode.None)[0];
         endTurnButton1 = endTurnButton;
+    }
+    private void OnEnable()
+    {
+        OnPlayerTurnStarted += StartPlayerCoroutine;
+        OnEnemyTurnStarted += StartEnemyCoroutine;
+        EnemyManager.OnEnemySelected += (AI) => ai = AI;
+    }
+    private void OnDisable()
+    {
+        OnPlayerTurnStarted -= StartPlayerCoroutine;
+        OnEnemyTurnStarted -= StartEnemyCoroutine;
+    }
+
+    private void StartPlayerCoroutine()
+    {
+        StartCoroutine(StartPlayerTurn());
+    }
+
+    private void StartEnemyCoroutine()
+    {
+        StartCoroutine(StartEnemyTurn());
     }
 
     private void Start()
@@ -37,24 +61,24 @@ public class TurnManager : MonoBehaviour
         isForStart = true;
         currentTurn = loadedData.turn;
         if (currentTurn == Turn.Enemy)
-            StartEnemyTurn();
+            StartEnemyCoroutine();
     }
 
-    public void StartPlayerTurn()
+    public IEnumerator StartPlayerTurn()
     {
-        currentTurn = Turn.Player;
-        if (GameStartManager.currentGameType == GameType.NewGame && isForStart)
+        if (loadedData.isNewSave && isForStart)
         {
-            StartCoroutine(cardManager.DrawCards(cardManager.handSize));
             ManaManager.currentMana = ManaManager.maxMana;
             ManaManager.Equalize();
+            yield return StartCoroutine(CardManager.Instance.DrawCards(CardManager.Instance.handSize));
         }  
         if (!isForStart)
         {
             ManaManager.currentMana = ManaManager.maxMana;
             ManaManager.Equalize();
-            StartCoroutine(cardManager.DrawCards(cardManager.handSize));
-        }   
+            yield return StartCoroutine(CardManager.Instance.DrawCards(CardManager.Instance.handSize));
+        }
+        currentTurn = Turn.Player;   
     }
 
     public void EndPlayerTurn()
@@ -62,18 +86,16 @@ public class TurnManager : MonoBehaviour
         if (currentTurn != Turn.Player) return;
 
         endTurnButton1.gameObject.SetActive(false);
-        cardManager.DiscardHand();
-        isForStart = false;
-        enemyManager.EndTurn();
+        CardManager.Instance.DiscardHand();
+        if (isForStart)
+            isForStart = false;
+        EnemyManager.Instance.EndTurn();
         StartCoroutine(StartEnemyTurn());
     }
 
     private IEnumerator StartEnemyTurn()
     {
         currentTurn = Turn.Enemy;
-
-        EnemyAlgoritmController ai = FindAnyObjectByType<EnemyAlgoritmController>();
-
         if (ai != null)
             yield return StartCoroutine(ai.ExecuteCurrentPlan());
         EndEnemyTurn();

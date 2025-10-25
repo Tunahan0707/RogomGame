@@ -8,6 +8,9 @@ using UnityEngine.SceneManagement;
 
 public class GameSceneManager : MonoBehaviour
 {
+    public static event Action OnContinueButtonClicked;
+    public static event Action OnRoomEntered;
+
     [Header("UI Elements")]
     [SerializeField] private Button continueButton;
     [SerializeField] private Button pauseButton;
@@ -30,15 +33,12 @@ public class GameSceneManager : MonoBehaviour
     [SerializeField] private int offFightYValue = -5;
     [SerializeField] private float animationDuration = 0.5f;
 
-    private RoomType currentRoomType = RoomType.Fight;
-    private int floor;
-    private int room;
+    private RoomType currentRoomType => RandomRoomSelector.selectedRoom;
+    private int floor => RandomRoomSelector.currentFloorIndex;
+    private int room => RandomRoomSelector.currentRoomIndex;
 
-    public static event Action OnContinueButtonClicked;
-    public static event Action OnRoomEntered;
-    private EnemyManager enemyManager;
+    
 
-    private TurnManager turnManager => GetComponent<TurnManager>();
 
     public int HandleDrawDeckCompleted { get; private set; }
 
@@ -61,16 +61,12 @@ public class GameSceneManager : MonoBehaviour
         });
         roomCountText.text = "1. Oda";
         floorCountText.text = "1. Kat";
-        currentRoomType = RoomType.Fight;
         pausePanel.SetActive(false);
-        room = 1;
-        floor = 1;
         fightRoom.SetActive(false);
         marketRoom.SetActive(false);
         upgradeRoom.SetActive(false);
         gainRoom.SetActive(false);
         restRoom.SetActive(false);
-        enemyManager = GetComponent<EnemyManager>();
     }
 
     private void Start()
@@ -88,9 +84,6 @@ public class GameSceneManager : MonoBehaviour
     private void ContinueButtonClicked()
     {  
         OnContinueButtonClicked?.Invoke();
-        room = RandomRoomSelector.currentRoomIndex;
-        floor = RandomRoomSelector.currentFloorIndex;
-        currentRoomType = RandomRoomSelector.selectedRoom;
         roomCountText.text = room + ". Oda";
         floorCountText.text = floor + ". Kat";
         FightDataHolder.Instance.SaveDatas();
@@ -127,7 +120,7 @@ public class GameSceneManager : MonoBehaviour
             yield return StartCoroutine(FadeManager.Instance.FadeIn());
             background.transform.DOLocalMoveY(onFightYValue, animationDuration).SetEase(Ease.OutCubic);
             fightRoom.SetActive(isFightRoom);
-            turnManager.StartPlayerTurn();
+            TurnManager.TriggerPlayerTurnStart();
         }
         else
         {

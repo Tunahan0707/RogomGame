@@ -24,7 +24,7 @@ public class FightManager : MonoBehaviour
 
     private void EnterTheRoom()
     {
-        if (GameStartManager.currentGameType == GameType.ContinueGame)
+        if (!loadedData.isNewSave)
             enemyManager.SpawnEnemyByID(loadedData.enemyID);
         else if (RandomRoomSelector.selectedRoom == RoomType.Fight)
         {

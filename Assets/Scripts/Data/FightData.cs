@@ -19,7 +19,8 @@ public class FightData
     public int enemysResistance;
     public int playersStrenght;
     public int playersResistance;
-    public TurnManager.Turn turn;
+    public bool isNewSave;
+    public Turn turn;
     public RoomType currentRoomType;
     public List<string> deck;
     public List<string> hand;
@@ -28,14 +29,12 @@ public class FightData
 
     public FightData()
     {
+        isNewSave = true;
         coin = 0;
         enemyID = "0";
-        enemysStrenght = 96963169;
-        playersStrenght = 96963169;
-        currentHP = 96963169;
         currentRoomIndex = 1;
         currentFloorIndex = 1;
-        turn = TurnManager.Turn.Player;
+        turn = Turn.Player;
         currentRoomType = RoomType.Fight;
         deck = new();
         hand = new();

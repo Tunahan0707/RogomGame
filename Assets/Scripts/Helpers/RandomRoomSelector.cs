@@ -1,12 +1,15 @@
 using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 
 public class RandomRoomSelector : MonoBehaviour
 {
     private const int totalRoomCount = 14;
 
-    [HideInInspector] public static int currentRoomIndex = 1;
-    public static int currentFloorIndex = 1;
+    private FightData loadedData => FightDataHolder.Instance.fightData;
+
+    public static int currentRoomIndex;
+    public static int currentFloorIndex;
     public static RoomType selectedRoom;
     private List<RoomType> addableRooms = new();
     private List<RoomType> possibleRooms = new();
@@ -14,11 +17,21 @@ public class RandomRoomSelector : MonoBehaviour
 
     void Awake()
     {
-        Debug.Log(GameStartManager.currentGameType);
-        if (GameStartManager.currentGameType == GameType.ContinueGame) return;
-        AddAddableRoomsForGameStart();
-        AddAddableRoomsForAwake();
-        AddAddableRoomsForAwake();
+        if (!loadedData.isNewSave)
+        {
+            currentRoomIndex = loadedData.currentRoomIndex;
+            currentFloorIndex = loadedData.currentFloorIndex;
+            selectedRoom = loadedData.currentRoomType;
+        }
+        else
+        {
+            currentFloorIndex = 1;
+            currentRoomIndex = 1;
+            selectedRoom = RoomType.Fight;
+            AddAddableRoomsForGameStart();
+            AddAddableRoomsForAwake();
+            AddAddableRoomsForAwake();
+        }
     }
 
     private void OnEnable()
@@ -84,13 +97,13 @@ public class RandomRoomSelector : MonoBehaviour
 
     private void SelectRandomRoom()
     {
-        randomIndex = UnityEngine.Random.Range(0, possibleRooms.Count);
+        randomIndex = Random.Range(0, possibleRooms.Count);
         selectedRoom = possibleRooms[randomIndex];
         possibleRooms.RemoveAt(randomIndex);
     }
     private void AddAddableRooms()
     {
-        randomIndex = UnityEngine.Random.Range(0, addableRooms.Count);
+        randomIndex = Random.Range(0, addableRooms.Count);
         if (addableRooms[randomIndex] == RoomType.CardChoice)
         {
             addableRooms.RemoveAll(room => room == RoomType.CardUpgrade);
@@ -104,7 +117,7 @@ public class RandomRoomSelector : MonoBehaviour
     }
     private void AddAddableRoomsForAwake()
     {
-        randomIndex = UnityEngine.Random.Range(0, addableRooms.Count);
+        randomIndex = Random.Range(0, addableRooms.Count);
         possibleRooms.Add(addableRooms[randomIndex]);
         addableRooms.RemoveAt(randomIndex);
     }

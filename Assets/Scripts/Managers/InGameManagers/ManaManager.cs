@@ -14,8 +14,11 @@ public class ManaManager : MonoBehaviour
     private void Awake()
     {
         ManaText = manaText;
-        currentMana = loadedData.currentMana;
         maxMana = PlayersDataBase.Instance.GetPlayerByID(playerData.currentPlayerID).maxMana + playerData.extraMana;
+        if (loadedData.isNewSave)
+            currentMana = maxMana;
+        else
+            currentMana = loadedData.currentMana;
     }
     private void Start()
     {

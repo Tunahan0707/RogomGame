@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using System;
+using UnityEngine.Animations;
 
 public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -15,7 +16,6 @@ public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private Button playButton;
     [SerializeField] private TMP_Text descriptionText;
     [SerializeField] private TMP_Text cardTypeText;
-    [SerializeField] private TMP_Text attackValueText;
     [SerializeField] private TMP_Text costText;
 
     [HideInInspector]
@@ -59,33 +59,31 @@ public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         Color typeColor = Color.white;
         string text = "Saldırı";
         switch (card.cardType)
-{
-    case CardsSO.CardType.Attack:
-        typeColor = new Color(0.55f, 0.1f, 0.1f); // koyu kırmızı (bordo ton)
-        text = "Saldırı";
-        break;
+        {
+            case CardsSO.CardType.Attack:
+                typeColor = new Color(0.55f, 0.1f, 0.1f); // koyu kırmızı (bordo ton)
+                text = "Saldırı";
+                break;
 
-    case CardsSO.CardType.Skill:
-        typeColor = new Color(0.15f, 0.35f, 0.6f); // koyu mavi-lacivert ton
-        text = "Beceri";
-        break;
+            case CardsSO.CardType.Skill:
+                typeColor = new Color(0.15f, 0.35f, 0.6f); // koyu mavi-lacivert ton
+                text = "Beceri";
+                break;
 
-    case CardsSO.CardType.Power:
-        typeColor = new Color(0.35f, 0.25f, 0.5f); // koyu mor ton
-        text = "Güç";
-        break;
+            case CardsSO.CardType.Power:
+                typeColor = new Color(0.35f, 0.25f, 0.5f); // koyu mor ton
+                text = "Güç";
+                break;
 
-    case CardsSO.CardType.Defence:
-        typeColor = new Color(0.15f, 0.35f, 0.6f); // koyu mavi-lacivert ton
-        text = "Beceri";
-        break;
-}
-
-        artwork.transform.parent.GetComponent<Image>().color = typeColor;
+            case CardsSO.CardType.Defence:
+                typeColor = new Color(0.15f, 0.35f, 0.6f); // koyu mavi-lacivert ton
+                text = "Beceri";
+                break;
+        }
+        artwork.transform.parent.parent.GetComponent<Image>().color = typeColor;
+        cardNameText.transform.parent.GetComponent<Image>().color = typeColor;
         costText.text = card.cost.ToString();
         cardTypeText.text = text;
-        attackValueText.text = card.attackValue.ToString();
-        attackValueText.gameObject.SetActive(card.attackValue != 0);
         if (string.IsNullOrEmpty(inDeckCardIDText))
             inDeckCardIDText = System.Guid.NewGuid().ToString();
         if (!AllCards.ContainsKey(inDeckCardIDText))
@@ -94,7 +92,7 @@ public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void OnCardPlayed()
     {
-        if (TurnManager.currentTurn != TurnManager.Turn.Player) return;
+        if (TurnManager.currentTurn != Turn.Player) return;
         if (cardManager == null)
         {
             OnCardClicked?.Invoke(this);
