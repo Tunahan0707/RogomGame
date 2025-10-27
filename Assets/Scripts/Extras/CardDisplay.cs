@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using System;
 using System.Collections.Generic;
+using Unity.Android.Gradle.Manifest;
 
 public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {

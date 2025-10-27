@@ -7,6 +7,7 @@ public class ManaManager : MonoBehaviour
     public static event Action OnManaSpent;
     public static int currentMana;
     public static int maxMana;
+    [SerializeField] private PlayersDataBase pDB;
     [SerializeField] private TextMeshProUGUI manaText;
     [SerializeField] private PlayersDataBase pDB;
     private static TextMeshProUGUI ManaText;

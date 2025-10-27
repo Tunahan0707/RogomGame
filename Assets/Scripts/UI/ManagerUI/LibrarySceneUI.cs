@@ -78,11 +78,13 @@ public class LibrarySceneUI : MonoBehaviour
         Image upgradeButtonImage = upgradeButton.gameObject.GetComponent<Image>();
         if (currentCardDisplay != null && !currentCardDisplay.cardData.isUpgradedVersion)
         {
+            currentCardDisplay?.UpgradeCard();
             upgradeButtonImage.sprite = checkedUpgradeSprite;
             currentCardDisplay?.UpgradeCard();
         }
         else
         {
+            currentCardDisplay?.DeUpgradeCard();
             upgradeButtonImage.sprite = uncheckedUpgradeSprite;
             currentCardDisplay?.DeUpgradeCard();
         }
@@ -104,5 +106,6 @@ public class LibrarySceneUI : MonoBehaviour
         currentCardDisplay = null;
         upgradeButton.gameObject.GetComponent<Image>().sprite = uncheckedUpgradeSprite;
         blackGround.gameObject.SetActive(false);
+        upgradeButton.gameObject.GetComponent<Image>().sprite = uncheckedUpgradeSprite;
     }
 }

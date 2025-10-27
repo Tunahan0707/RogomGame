@@ -33,6 +33,8 @@ public class GameSceneManager : MonoBehaviour
     [SerializeField] private int offFightYValue = -5;
     [SerializeField] private float animationDuration = 0.5f;
 
+    [SerializeField] private PlayersDataBase pDB;
+
     private RoomType currentRoomType => RandomRoomSelector.selectedRoom;
     private int floor => RandomRoomSelector.currentFloorIndex;
     private int room => RandomRoomSelector.currentRoomIndex;
