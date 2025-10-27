@@ -13,15 +13,14 @@ MonoBehaviour:
   m_Name: Defence
   m_EditorClassIdentifier: Assembly-CSharp::CardsSO
   cardName: Savun!
-  description: "Klasik savunma kart\u0131.\n5 kalkan kazand\u0131r\u0131r."
+  description: "Klasik savunma kart\u0131."
   artwork: {fileID: 0}
   cardType: 3
-  cardRarelity: 0
+  rarity: 0
   cost: 1
-  howManyHaveOnStart: 4
-  cardID: 64cba2e6-b533-4d6d-99af-5e9315e7e7bd
-  attackValue: 0
   unlockLevel: 0
-  shieldValue: 5
-  healValue: 0
+  howManyHaveOnStart: 4
   isLocked: 0
+  cardID: 64cba2e6-b533-4d6d-99af-5e9315e7e7bd
+  effects:
+  - {fileID: 11400000, guid: cf3afb3a56bd2da439c344c3209be240, type: 2}

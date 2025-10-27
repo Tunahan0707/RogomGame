@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class CardPlayingController : MonoBehaviour
@@ -7,42 +6,39 @@ public class CardPlayingController : MonoBehaviour
     private PlayerManager playerManager => PlayerManager.Instance;
     private EnemyAlgoritmController ai;
 
-
     private void OnEnable()
     {
-        CardDisplay.OnCardClicked += CardPlayed;
+        CardDisplay.OnCardClicked += OnCardPlayed;
         EnemyManager.OnEnemySelected += (AI) => ai = AI;
     }
+
     private void OnDisable()
     {
-        CardDisplay.OnCardClicked -= CardPlayed;;
+        CardDisplay.OnCardClicked -= OnCardPlayed;
     }
 
-
-    private void CardPlayed(CardDisplay cardDisplay)
+    private void OnCardPlayed(CardDisplay cardDisplay)
     {
-        if (cardDisplay.cardData.cost != 0)
-        {
-            if (ManaManager.currentMana < cardDisplay.cardData.cost) return;
-            ManaManager.currentMana -= cardDisplay.cardData.cost; 
-        }
+        if (TurnManager.currentTurn != Turn.Player) return;
+
+        var card = cardDisplay.cardData;
+        if (ManaManager.currentMana < card.cost) return;
+
+        ManaManager.currentMana -= card.cost;
         ManaManager.Equalize();
-        cardDisplay.PlayCard();
-        ai.UpdateCurrentPlan();   
-        if (cardDisplay.cardData.attackValue != 0)
-            enemyManager.TakeDamage(cardDisplay.cardData.attackValue + playerManager.strenght);
-        if (cardDisplay.cardData.shieldValue != 0)
-            playerManager.AddShield(cardDisplay.cardData.shieldValue);
-        if (cardDisplay.cardData.healValue != 0)
-            playerManager.Heal(cardDisplay.cardData.healValue);
-        if (cardDisplay.cardData.addingResistnace != 0)
-            playerManager.BuffResistance(cardDisplay.cardData.addingResistnace);
-        if (cardDisplay.cardData.addingStrenght != 0)
-            playerManager.BuffStrenght(cardDisplay.cardData.addingStrenght);
-        if (cardDisplay.cardData.debuffingEnemysResistance != 0)
-            ai.DebuffResistance(cardDisplay.cardData.debuffingEnemysResistance);
-        if (cardDisplay.cardData.debuffingEnemysStrenght != 0)
-            ai.DebuffStrenght(cardDisplay.cardData.debuffingEnemysStrenght);
-        // if (cardDisplay.cardData.cardDisplay.cardDataName == Consts.CardNames.)
+        if (card.isUpgradedVersion)
+        {
+            foreach (var effect in card.upgradedEffects)
+                effect.Apply(ai);
+        }
+        else
+        {
+            foreach (var effect in card.effects)
+                effect.Apply(ai);
+        }    
+        CardZoneManager.SetZone(cardDisplay.GetCardID(), CardZone.Discard);
+        CardManagerUI.Instance.MoveCard(cardDisplay.GetCardID(), CardZone.Discard);
+
+        ai?.UpdateCurrentPlan();
     }
 }

@@ -13,19 +13,14 @@ MonoBehaviour:
   m_Name: Heal
   m_EditorClassIdentifier: Assembly-CSharp::CardsSO
   cardName: "\u0130yile\u015F!"
-  description: "Klasik iyile\u015Fme kart\u0131.\n3 can iyile\u015Ftirir."
+  description: "Klasik iyile\u015Fme kart\u0131."
   artwork: {fileID: 0}
   cardType: 1
-  cardRarelity: 0
+  rarity: 0
   cost: 1
-  howManyHaveOnStart: 2
-  cardID: cb8bc045-d483-4740-8271-929640acbdb1
-  attackValue: 0
   unlockLevel: 0
-  shieldValue: 0
-  healValue: 3
-  addingResistnace: 0
-  addingStrenght: 0
-  debuffingEnemysStrenght: 0
-  debuffingEnemysResistance: 0
+  howManyHaveOnStart: 2
   isLocked: 0
+  cardID: cb8bc045-d483-4740-8271-929640acbdb1
+  effects:
+  - {fileID: 11400000, guid: fee459e910e2ac0408b421be8b0e84a9, type: 2}

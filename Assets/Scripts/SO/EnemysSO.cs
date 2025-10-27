@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "New Enemy", menuName = "ScriptableObjects/Enemy")]
-public class EnemysSO : ScriptableObject, IGameObject
+public class EnemysSO : ScriptableObject, IUnlockable
 {
     [Header("Enemy Info")]
     public string enemyName;
@@ -19,6 +19,11 @@ public class EnemysSO : ScriptableObject, IGameObject
     public EnemyType enemyType;
     public bool isLocked;
     public int unlockLevel;
+    public bool IsLocked
+    {
+        get => isLocked;
+        set => isLocked = value;
+    }
 
     [Header("Enemy Abilities")]
     public List<string> specialAbilities = new();
@@ -28,12 +33,6 @@ public class EnemysSO : ScriptableObject, IGameObject
     public int experienceGive;
 
     [HideInInspector] public string enemyID;
-
-    public string Name { get => enemyName; set => enemyName = value; }
-    public int UnlockLevel { get => unlockLevel; set => unlockLevel = value; }
-    public string ID { get => enemyID; set => enemyID = value; }
-    public bool IsLocked { get => isLocked; set => isLocked = value; }
-
 
     private void OnValidate()
     {

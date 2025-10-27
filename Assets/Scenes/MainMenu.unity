@@ -616,19 +616,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FightDataHolder
   fightData:
-    coin: 0
-    currentHP: 0
-    enemyID: 0
-    currentEnemyHP: 0
-    currentRoomIndex: 1
-    currentFloorIndex: 1
-    currentEnemyShield: 0
-    turn: 0
-    currentRoomType: 0
     deck: []
+    drawDeck: []
     hand: []
     discardPile: []
-    drawDeck: []
+    currentHP: 0
+    coin: 0
+    currentMana: 0
+    currentRoomIndex: 1
+    currentFloorIndex: 1
+    currentEnemyHP: 0
+    currentEnemyShield: 0
+    currentPlayerShield: 0
+    enemysCurrentPlan: 0
+    enemysResistance: 0
+    enemysStrenght: 0
+    playersStrenght: 0
+    playersResistance: 0
+    currentRoomType: 0
+    turn: 0
+    enemyID: 0
+    isNewSave: 1
 --- !u!4 &284355058
 Transform:
   m_ObjectHideFlags: 0
@@ -1443,10 +1451,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDataHolder
   playerData:
     playerID: 0647459a-e6bb-4819-bd0b-fdc6edc904cd
-    level: 1
-    xp: 0
-    maxHP: 100
+    PUAN: 0
     extraHP: 0
+    extraMana: 0
     currentPlayerID: 
   cDB: {fileID: 11400000, guid: 036b32ecc84976b4a86995345c05bd57, type: 2}
   pDB: {fileID: 11400000, guid: 9fb4dda26fc0c8443917523bbd1f3767, type: 2}
@@ -2113,6 +2120,50 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &1599140561
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1599140563}
+  - component: {fileID: 1599140562}
+  m_Layer: 0
+  m_Name: PUANManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1599140562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599140561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ee7f1456c7e7ed449d13cb5e4b831f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PUANManager
+--- !u!4 &1599140563
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599140561}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -78.66515, y: 191.05145, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1600137267
 GameObject:
   m_ObjectHideFlags: 0
@@ -2744,3 +2795,4 @@ SceneRoots:
   - {fileID: 1536662675}
   - {fileID: 1285909786}
   - {fileID: 284355058}
+  - {fileID: 1599140563}

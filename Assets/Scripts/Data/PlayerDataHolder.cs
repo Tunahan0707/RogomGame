@@ -29,44 +29,46 @@ public class PlayerDataHolder : MonoBehaviour
     }
     private void OnEnable()
     {
-        XPManager.OnXPChanged += (x) => xp = x;
-        XPManager.OnPlayerLevelUp += LevelUp;
+        PlayerProgress.OnPlayerLevelUp += OnLevelUp; // 🔥 Event’e abone ol
     }
 
-    private void LevelUp()
+    private void OnDisable()
     {
-        playerData.level++;
-        playerData.extraHP += playerData.extraHP * playerData.level * 0.6f + 5;
-        playerData.extraMana += Mathf.RoundToInt((playerData.level + 1) * 0.1f);
-        UnlockALL();
+        PlayerProgress.OnPlayerLevelUp -= OnLevelUp;
+    }
+
+    public void OnLevelUp(int newLevel)
+    {
+        playerData.extraHP += newLevel * 0.6f + 5;
+        playerData.extraMana += Mathf.RoundToInt((newLevel + 1) * 0.1f);
+        UnlockALL(newLevel);
         SaveDatas();
+        Debug.Log($"📈 Oyuncu seviye atladı: {newLevel}");
     }
 
-    private void UnlockALL()
+    private void UnlockALL(int level)
     {
-        Unlock(oDB.UnlockLevel(playerData.level));
-        Unlock(pDB.UnlockLevel(playerData.level));
-        Unlock(eDB.UnlockLevel(playerData.level));
-        Unlock(cDB.UnlockLevel(playerData.level));
+        Unlock(oDB.UnlockLevel(level));
+        Unlock(pDB.UnlockLevel(level));
+        Unlock(eDB.UnlockLevel(level));
+        Unlock(cDB.UnlockLevel(level));
     }
 
-    private void Unlock<T>(List<T> y) where T : IGameObject
+    private void Unlock<T>(List<T> list) where T : IUnlockable
     {
-        if (y == null) return;
-        foreach (var x in y)
-        {
-            if (x.IsLocked)
-                x.IsLocked = false;
-        }
+        if (list == null) return;
+        foreach (var item in list)
+            item.IsLocked = false;
     }
+
+
     public void SaveDatas()
     {
-        playerData.xp = xp;
         if (CharacterSceneManager.currentPlayer != null)
             playerData.currentPlayerID = CharacterSceneManager.currentPlayer.playerID;
         if (playerData.currentPlayerID == null)
             playerData.currentPlayerID = pDB.startingPlayer.playerID;
-        playerData.maxHP = Mathf.RoundToInt(PlayersDataBase.Instance.GetPlayerByID(playerData.currentPlayerID).health + playerData.extraHP);
+        playerData.PUAN = PUANManager.puan;
         Save();
     }
     public void Save()

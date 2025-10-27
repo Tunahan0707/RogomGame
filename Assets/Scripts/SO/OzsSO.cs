@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Öz", menuName = "ScriptableObjects/Öz")]
-public class OzsSO : ScriptableObject, IGameObject
+public class OzsSO : ScriptableObject, IUnlockable
 {
     [Header("Öz Info")]
     public string ozName;
@@ -11,6 +11,11 @@ public class OzsSO : ScriptableObject, IGameObject
     public OzType ozType;
     public bool isLocked;
     public int unlockLevel;
+    public bool IsLocked
+    {
+        get => isLocked;
+        set => isLocked = value;
+    }
     [HideInInspector] public string ozsID;
     
     [Header("Öz Stats")]
@@ -25,11 +30,6 @@ public class OzsSO : ScriptableObject, IGameObject
     public int PUAN_Multiplier = 1;
     public int extraGold = 0;
     public List<string> specialEffects = new();
-
-    public string Name { get => ozName; set => ozName = value; }
-    public int UnlockLevel { get => unlockLevel; set => unlockLevel = value; }
-    public string ID { get => ozsID; set => ozsID = value; }
-    public bool IsLocked { get => isLocked; set => isLocked = value; }
 
     private void OnValidate()
     {

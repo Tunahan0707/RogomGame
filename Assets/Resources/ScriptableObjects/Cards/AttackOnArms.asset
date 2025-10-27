@@ -13,20 +13,15 @@ MonoBehaviour:
   m_Name: AttackOnArms
   m_EditorClassIdentifier: Assembly-CSharp::CardsSO
   cardName: "Kollara sald\u0131r!"
-  description: "Rakibinin kollar\u0131na sald\u0131r\u0131rs\u0131n ve rakibin 1
-    g\xFC\xE7 kaybeder."
+  description: "D\xFC\u015Fman\u0131n\u0131n kollar\u0131na sald\u0131r\u0131rs\u0131n."
   artwork: {fileID: 0}
   cardType: 1
-  cardRarelity: 1
+  rarity: 0
   cost: 0
-  howManyHaveOnStart: 0
-  cardID: c4687140-9891-414b-957e-c19e41a3ca8d
-  attackValue: 1
   unlockLevel: 0
-  shieldValue: 0
-  healValue: 0
-  addingResistnace: 0
-  addingStrenght: 0
-  debuffingEnemysStrenght: 1
-  debuffingEnemysResistance: 0
+  howManyHaveOnStart: 0
   isLocked: 0
+  cardID: c4687140-9891-414b-957e-c19e41a3ca8d
+  effects:
+  - {fileID: 11400000, guid: d2bb1dddf7f718a4bb7dc66765885610, type: 2}
+  - {fileID: 11400000, guid: aeb4b94551603cf4d860feae6913a341, type: 2}

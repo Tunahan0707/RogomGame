@@ -14,7 +14,6 @@ public class PlayerDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public static event Action<PlayersSO> OnPlayerSelected;
 
     [Header("UI References")]
-    [SerializeField] private PlayerManager playerManager;
     [SerializeField] private TextMeshProUGUI playerNameText;
     [SerializeField] private TextMeshProUGUI playerHealthText;
     [SerializeField] private TextMeshProUGUI playerShieldText;
@@ -34,7 +33,6 @@ public class PlayerDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void Awake()
     {
-        playerManager = FindAnyObjectByType<PlayerManager>();
         if (button != null)
             button.onClick.AddListener(OnClick);
         else
@@ -71,12 +69,10 @@ public class PlayerDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         if (!AllPlayers.ContainsKey(playerData.playerID))
             AllPlayers.Add(playerData.playerID, this);
-        if (playerManager != null)
+        if (PlayerManager.Instance != null)
         {
             playerShieldBar2.fillAmount = 0f;
             playerShieldBar.fillAmount = 0f;
-            UpdateShieldDisplay(PlayerManager.Instance.shield, playerManager.maxHealth);
-            UpdateHealthDisplay(PlayerManager.Instance.playerHealth, playerManager.maxHealth);
         }
     }
 

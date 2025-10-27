@@ -5,40 +5,25 @@ using UnityEngine;
 [Serializable]
 public class FightData
 {
+    public List<string> deck = new();
+    public List<string> drawDeck = new();
+    public List<string> hand = new();
+    public List<string> discardPile = new();
+    public int currentHP;
     public int coin;
-    public float currentHP;
-    public string enemyID;
-    public int enemysCurrentPlan;
-    public int currentEnemyHP;
+    public int currentMana;
     public int currentRoomIndex;
     public int currentFloorIndex;
+    public int currentEnemyHP;
     public int currentEnemyShield;
     public int currentPlayerShield;
-    public int currentMana;
-    public int enemysStrenght;
+    public int enemysCurrentPlan;
     public int enemysResistance;
+    public int enemysStrenght;
     public int playersStrenght;
     public int playersResistance;
-    public bool isNewSave;
-    public Turn turn;
     public RoomType currentRoomType;
-    public List<string> deck;
-    public List<string> hand;
-    public List<string> discardPile;
-    public List<string> drawDeck;
-
-    public FightData()
-    {
-        isNewSave = true;
-        coin = 0;
-        enemyID = "0";
-        currentRoomIndex = 1;
-        currentFloorIndex = 1;
-        turn = Turn.Player;
-        currentRoomType = RoomType.Fight;
-        deck = new();
-        hand = new();
-        discardPile = new();
-        drawDeck = new();
-    }
+    public Turn turn;
+    public string enemyID = "-1";
+    public bool isNewSave = true;
 }

@@ -761,7 +761,7 @@ GameObject:
   - component: {fileID: 314228531}
   - component: {fileID: 314228530}
   m_Layer: 5
-  m_Name: ThrowingDeckImage
+  m_Name: DiscardPileImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4244,7 +4244,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.71851}
+  m_AnchoredPosition: {x: 0, y: -0.71850586}
   m_SizeDelta: {x: 71.1035, y: 69.281}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1509755576
@@ -4500,14 +4500,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3efc80b375c71814bb3c29c4a4559b32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardManagerUI
-  cardPrefab: {fileID: 2241219057022671268, guid: 075fbd1ed0208f9438a8b0f3343b7520, type: 3}
-  handParent: {fileID: 1657422595}
   drawDeckParent: {fileID: 2101612648}
-  discardPileParent: {fileID: 693910924}
-  cardManager: {fileID: 1910047801}
-  currentHandUIs: []
-  currentDiscardUIs: []
-  handLayout: {fileID: 1657422596}
+  handParent: {fileID: 1657422595}
+  discardParent: {fileID: 693910924}
+  cardPrefab: {fileID: 2241219057022671268, guid: 075fbd1ed0208f9438a8b0f3343b7520, type: 3}
 --- !u!4 &1576329542
 Transform:
   m_ObjectHideFlags: 0
@@ -4550,7 +4546,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardUI
   deckText: {fileID: 589541229}
   discardText: {fileID: 1001528897}
-  cardManager: {fileID: 1910047801}
 --- !u!114 &1576329545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5241,8 +5236,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55a6fbb14cd459648976d4664b84a2b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TurnManager
-  cardManager: {fileID: 1910047801}
-  enemyManager: {fileID: 1910047800}
   endTurnButton: {fileID: 1795034971}
 --- !u!114 &1910047799
 MonoBehaviour:
@@ -5271,8 +5264,6 @@ MonoBehaviour:
   currentEnemy: {fileID: 0}
   enemiesDataBase: {fileID: 11400000, guid: f6d0032bd4faef947be6427d249205e9, type: 2}
   enemyManagerUI: {fileID: 1576329545}
-  currentHealth: 0
-  shield: 0
   currentEnemys: []
 --- !u!114 &1910047801
 MonoBehaviour:
@@ -5286,11 +5277,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f921294b70e8cb41939112e600ab2c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardManager
-  drawDeck: []
-  hand: []
-  discardPile: []
-  deck: []
-  handSize: 5
   cardsDataBase: {fileID: 11400000, guid: 036b32ecc84976b4a86995345c05bd57, type: 2}
 --- !u!114 &1910047802
 MonoBehaviour:

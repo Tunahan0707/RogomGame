@@ -13,6 +13,7 @@ public class Consts
     {
         public const string PlayerDataFile = "playerData.json";
         public const string FightDataFile = "fightData.json";
+        public const string XPDataFile = "xpData.json";
     }
 
     public struct ListNames

@@ -120,7 +120,8 @@ public class GameSceneManager : MonoBehaviour
             yield return StartCoroutine(FadeManager.Instance.FadeIn());
             background.transform.DOLocalMoveY(onFightYValue, animationDuration).SetEase(Ease.OutCubic);
             fightRoom.SetActive(isFightRoom);
-            TurnManager.TriggerPlayerTurnStart();
+            if (TurnManager.currentTurn == Turn.Player)
+                StartCoroutine(TurnManager.Instance.StartPlayerTurn());
         }
         else
         {

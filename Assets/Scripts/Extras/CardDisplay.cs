@@ -1,138 +1,127 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEditor;
-using Unity.VisualScripting;
-using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using System;
-using UnityEngine.Animations;
+using System.Collections.Generic;
 
 public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public static event Action<CardDisplay> OnCardClicked;
+
+    [Header("UI References")]
     [SerializeField] private Image artwork;
     [SerializeField] private TMP_Text cardNameText;
-    [SerializeField] private Button playButton;
     [SerializeField] private TMP_Text descriptionText;
     [SerializeField] private TMP_Text cardTypeText;
     [SerializeField] private TMP_Text costText;
+    [SerializeField] private Button playButton;
 
-    [HideInInspector]
-    public static Dictionary<string, CardDisplay> AllCards = new();
-    public string inDeckCardIDText;
+    public string cardIDInScene { get; private set; }
 
+    private RectTransform rect;
     private Vector3 originalScale;
     private Quaternion originalRotation;
     private Vector2 originalPosition;
-    private RectTransform rect;
-
+    private int originalCost;
     public CardsSO cardData { get; private set; }
-    private CardManager cardManager;
-    private TurnManager turnManager;
 
     private void Awake()
     {
-        cardManager = FindObjectsByType<CardManager>(FindObjectsSortMode.None)[0];
-        turnManager = FindObjectsByType<TurnManager>(FindObjectsSortMode.None)[0];
-
+        rect = GetComponent<RectTransform>();
         playButton.onClick.RemoveAllListeners();
         playButton.onClick.AddListener(OnCardPlayed);
-        rect = GetComponent<RectTransform>();
+
         originalScale = rect.localScale;
         originalRotation = rect.localRotation;
         originalPosition = rect.anchoredPosition;
     }
 
-    private void OnDestroy()
-    {
-        if (AllCards.ContainsKey(inDeckCardIDText))
-            AllCards.Remove(inDeckCardIDText);
-    }
-
     public void SetCard(CardsSO card)
     {
+        string cardDescription = "";
+
+        if (card.effects != null && card.effects.Count > 0)
+        {
+            foreach (var effect in card.effects)
+            {
+                string desc = effect.GetDescription();
+                if (!string.IsNullOrEmpty(desc))
+                    cardDescription += desc + "\n";
+            }
+        }
+
         cardData = card;
         artwork.sprite = card.artwork;
+        cardNameText.text = card.cardName + " +";
         cardNameText.text = card.cardName;
-        descriptionText.text = card.description;
-        Color typeColor = Color.white;
-        string text = "Saldırı";
+
+        // Ana açıklama varsa onu da en üstte göster
+        if (!string.IsNullOrEmpty(card.description))
+            descriptionText.text = card.description + "\n" + cardDescription;
+        else
+            descriptionText.text = cardDescription;
+        costText.text = card.cost.ToString();
+
+        Color typeColor;
+        string typeText;
+
         switch (card.cardType)
         {
             case CardsSO.CardType.Attack:
-                typeColor = new Color(0.55f, 0.1f, 0.1f); // koyu kırmızı (bordo ton)
-                text = "Saldırı";
+                typeColor = new Color(0.55f, 0.1f, 0.1f); // koyu kırmızı
+                typeText = "Saldırı";
                 break;
-
             case CardsSO.CardType.Skill:
-                typeColor = new Color(0.15f, 0.35f, 0.6f); // koyu mavi-lacivert ton
-                text = "Beceri";
+                typeColor = new Color(0.15f, 0.35f, 0.6f); // lacivert
+                typeText = "Beceri";
                 break;
-
             case CardsSO.CardType.Power:
-                typeColor = new Color(0.35f, 0.25f, 0.5f); // koyu mor ton
-                text = "Güç";
+                typeColor = new Color(0.35f, 0.25f, 0.5f); // mor
+                typeText = "Güç";
                 break;
-
             case CardsSO.CardType.Defence:
-                typeColor = new Color(0.15f, 0.35f, 0.6f); // koyu mavi-lacivert ton
-                text = "Beceri";
+                typeColor = new Color(0.15f, 0.35f, 0.6f);
+                typeText = "Savunma";
+                break;
+            default:
+                typeColor = Color.white;
+                typeText = "Bilinmiyor";
                 break;
         }
+
+        cardTypeText.text = typeText;
+
+        // Kartın ana görsel çerçevesini renklendir
         artwork.transform.parent.parent.GetComponent<Image>().color = typeColor;
         cardNameText.transform.parent.GetComponent<Image>().color = typeColor;
-        costText.text = card.cost.ToString();
-        cardTypeText.text = text;
-        if (string.IsNullOrEmpty(inDeckCardIDText))
-            inDeckCardIDText = System.Guid.NewGuid().ToString();
-        if (!AllCards.ContainsKey(inDeckCardIDText))
-            AllCards.Add(inDeckCardIDText, this);
+
+        if (FightDataHolder.Instance.fightData.isNewSave)
+            originalCost =  cardData.cost;
+
+        if (string.IsNullOrEmpty(cardIDInScene))
+            cardIDInScene = System.Guid.NewGuid().ToString();
+        if (cardData.isUpgradedVersion)
+            UpgradeCard();
+        PlayerManager.OnStatsChanged -= UpdateCardDescription;
+        PlayerManager.OnStatsChanged += UpdateCardDescription;
+        ManaManager.OnManaSpent -= UpdateCostText;
+        ManaManager.OnManaSpent += UpdateCostText;
+    }
+    private void OnDestroy()
+    {
+        ManaManager.OnManaSpent -= UpdateCostText;
+        PlayerManager.OnStatsChanged -= UpdateCardDescription;
     }
 
     private void OnCardPlayed()
     {
-        if (TurnManager.currentTurn != Turn.Player) return;
-        if (cardManager == null)
-        {
-            OnCardClicked?.Invoke(this);
-            return; 
-        }
-        else if (cardManager.hand.Contains(inDeckCardIDText))
-        {
-            OnCardClicked?.Invoke(this);
-        }
-        else
-        {
-            Debug.Log("Kart oynanamadı");
-        }
-    }
+        if (TurnManager.currentTurn != Turn.Player) return; 
 
-    public void PlayCard()
-    {
-        cardManager.hand.Remove(inDeckCardIDText);
-        cardManager.discardPile.Add(inDeckCardIDText);
-        CardManagerUI.Instance.CardPlayed(gameObject);
-    }
+        var currentZone = CardZoneManager.GetZone(cardIDInScene);
+        if (currentZone != CardZone.Hand) return; // sadece elden oynanabilir
 
-    public string GetCardID()
-    {
-        return inDeckCardIDText;
-    }
-    public GameObject GetGameObject(string inDeckCardIDText)
-    {
-        if (AllCards.TryGetValue(inDeckCardIDText, out var card))
-            return card.gameObject;
-
-        Debug.LogWarning($"Card with ID {inDeckCardIDText} not found.");
-        return null;
-    }
-
-    public static CardDisplay GetCardDisplay(string id)
-    {
-        if (AllCards.TryGetValue(id, out var card))
-            return card;
-        return null;
+        OnCardClicked?.Invoke(this);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -141,6 +130,7 @@ public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         rect.localScale = originalScale * 1.2f;
         rect.localRotation = Quaternion.identity;
 
+        // eğer eldeyse, hover animasyonu el düzenini güncelleyebilir
         HandLayout layout = transform.parent.GetComponent<HandLayout>();
         if (layout != null)
             layout.UpdateHandLayout(gameObject);
@@ -156,12 +146,78 @@ public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             layout.UpdateHandLayout();
     }
 
-    public static string GetCardID(string inDeckCardIDText)
+    public string GetCardID()
     {
-        if (AllCards.TryGetValue(inDeckCardIDText, out var card))
-            return card.cardData.cardID;
+        return cardIDInScene;
+    }
 
-        Debug.LogWarning($"Card with ID {inDeckCardIDText} not found.");
-        return null;
+    public void UpdateCardDescription()
+    {
+        string cardDescription = "";
+
+        foreach (var effect in cardData.effects)
+        {
+            string desc = effect.GetDescription();
+            if (!string.IsNullOrEmpty(desc))
+                cardDescription += desc + "\n";
+        }
+
+        descriptionText.text = cardData.description + "\n" + cardDescription;
+    }
+    public void UpdateCostText()
+    {
+        if (ManaManager.currentMana < cardData.cost)
+            costText.color = Color.red;
+    }
+    public void ChangeCost(bool isNew, int cost)
+    {
+        if (isNew)
+            cardData.cost = cost;
+        else
+            cardData.cost += cost;
+        costText.text = cardData.cost.ToString();
+
+        Color newColor;
+        if (ColorUtility.TryParseHtmlString("#00CC66", out newColor))
+        {
+            costText.color = newColor;
+        }
+    }
+    public void ResetCost()
+    {
+        cardData.cost = originalCost;
+        costText.text = cardData.cost.ToString();
+        costText.color = Color.white;
+    }
+
+    public void UpgradeCard()
+    {
+        cardData.isUpgradedVersion = true;
+        cardNameText.text = cardData.cardName + " +";
+        cardNameText.color = Color.greenYellow;
+        string cardDescription = "";
+        foreach (var effect in cardData.upgradedEffects)
+        {
+            string desc = effect.GetDescription();
+            if (!string.IsNullOrEmpty(desc))
+                cardDescription += desc + "\n";
+        }
+        descriptionText.text = cardData.description + "\n" + cardDescription;
+    }
+    public void DeUpgradeCard()
+    {
+        cardData.isUpgradedVersion = false;
+        cardNameText.text = cardData.cardName;
+        cardNameText.color = Color.white;
+        UpdateCardDescription();
+    }
+    public void LockImage()
+    {
+        artwork.color = Color.gray;
+        artwork.transform.parent.GetComponent<Image>().color = Color.gray;
+        artwork.transform.parent.parent.GetComponent<Image>().color = Color.gray;
+        cardNameText.text = "???";
+        descriptionText.text = "Bu kart kilitli.";
+        playButton.interactable = false;
     }
 }

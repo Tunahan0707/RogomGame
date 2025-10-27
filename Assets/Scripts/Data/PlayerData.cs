@@ -6,9 +6,7 @@ using UnityEngine;
 public class PlayerData
 {
     public string playerID;
-    public int level;
-    public int xp;
-    public float maxHP;
+    public int PUAN;
     public float extraHP;
     public int extraMana;
     public string currentPlayerID;
@@ -16,9 +14,7 @@ public class PlayerData
     public PlayerData()
     {
         playerID = Guid.NewGuid().ToString();
-        level = 1;
-        xp = 0;
-        maxHP = 100;
         extraHP = 0;
+        PUAN = 0;
     }
 }

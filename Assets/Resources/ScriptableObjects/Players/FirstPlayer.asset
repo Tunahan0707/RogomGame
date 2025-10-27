@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayersSO
   playersName: FirstPlayer
   playerSprite: {fileID: -3337038689812066966, guid: 5d651a585621a2441b064bcc1e5ff998, type: 3}
-  health: 100
+  health: 42
   inStartCoins: 0
   baseShield: 0
   baseStrenght: 0

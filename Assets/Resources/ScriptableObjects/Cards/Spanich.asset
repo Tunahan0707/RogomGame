@@ -13,19 +13,15 @@ MonoBehaviour:
   m_Name: Spanich
   m_EditorClassIdentifier: Assembly-CSharp::CardsSO
   cardName: Ispanak
-  description: "Ispanak yersin.\n2 puan iyile\u015F.\n2 kuvvet kazan."
+  description: Ispanak yersin.
   artwork: {fileID: 0}
   cardType: 1
-  cardRarelity: 1
+  rarity: 0
   cost: 2
-  howManyHaveOnStart: 0
-  cardID: 8f1b54ef-f8d8-4ec4-af69-5fdcfa205bd5
-  attackValue: 0
   unlockLevel: 0
-  shieldValue: 0
-  healValue: 2
-  addingResistnace: 0
-  addingStrenght: 2
-  debuffingEnemysStrenght: 0
-  debuffingEnemysResistance: 0
+  howManyHaveOnStart: 0
   isLocked: 0
+  cardID: 8f1b54ef-f8d8-4ec4-af69-5fdcfa205bd5
+  effects:
+  - {fileID: 11400000, guid: b53b36232547c7a4fb4488cd3b0122d0, type: 2}
+  - {fileID: 11400000, guid: 98f2a1cb8bd07d54493571edd861d9fe, type: 2}

@@ -4,6 +4,7 @@ using DG.Tweening;
 
 public class HandLayout : MonoBehaviour
 {
+    public static HandLayout Instance;
     [SerializeField] private float cardSpacing = 150f;
     [SerializeField] private float maxSpread = 800f;
     [SerializeField] private float curveHeight = 80f;
@@ -12,6 +13,13 @@ public class HandLayout : MonoBehaviour
 
     public List<GameObject> handCards = new();
 
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
     public void UpdateHandLayout(GameObject highlightedCard = null)
     {
         int count = handCards.Count;

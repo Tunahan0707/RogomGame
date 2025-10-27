@@ -24,7 +24,7 @@ public class CardsDataBase : ScriptableObject
         cards = new List<CardsSO>(Resources.LoadAll<CardsSO>(Consts.FileWays.CardsSO));
         foreach (var card in cards)
         {
-            switch (card.cardRarelity)
+            switch (card.rarity)
             {
                 case CardRarelitys.Start: startingCards.Add(card); break;
                 case CardRarelitys.Normal: normalCards.Add(card); break;

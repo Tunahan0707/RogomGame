@@ -13,15 +13,14 @@ MonoBehaviour:
   m_Name: Attack
   m_EditorClassIdentifier: Assembly-CSharp::CardsSO
   cardName: "Sald\u0131r!"
-  description: "Klasik sald\u0131r\u0131 kart\u0131.\n6 hasar verir."
+  description: "Klasik sald\u0131r\u0131 kart\u0131."
   artwork: {fileID: 0}
   cardType: 0
-  cardRarelity: 0
+  rarity: 0
   cost: 1
-  howManyHaveOnStart: 4
-  cardID: 6c0f008b-f94f-424d-acb3-ec3f0302c76c
-  attackValue: 6
   unlockLevel: 0
-  shieldValue: 0
-  healValue: 0
+  howManyHaveOnStart: 4
   isLocked: 0
+  cardID: 6c0f008b-f94f-424d-acb3-ec3f0302c76c
+  effects:
+  - {fileID: 11400000, guid: f97500233d3c3e94b99f09d3b6ff699f, type: 2}
