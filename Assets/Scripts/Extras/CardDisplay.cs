@@ -122,7 +122,6 @@ public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // eğer eldeyse, hover animasyonu el düzenini güncelleyebilir
         HandLayout layout = transform.parent.GetComponent<HandLayout>();
         if (layout == null) return;
         rect.SetAsLastSibling();
@@ -133,7 +132,7 @@ public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        HandLayout layout = transform.parent.GetComponent<HandLayout>();
+        HandLayout layout = transform.parent.GetComponent<HandLayout>();  
         if (layout == null) return;
         rect.localScale = originalScale;
         rect.localRotation = originalRotation;
@@ -207,14 +206,13 @@ public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
     public void LockImage()
     {
-        artwork.color = Color.gray;
+        artwork.gameObject.SetActive(false);
         artwork.transform.parent.GetComponent<Image>().color = Color.gray;
         artwork.transform.parent.parent.GetComponent<Image>().color = Color.gray;
         cardNameText.text = "???";
         descriptionText.text = "Bu kart kilitli.";
         playButton.interactable = false;
-        cardNameText.transform.parent.GetComponent<Image>().color = Color.gray;
-        cardTypeText.text = "???";
         costText.text = "?";
+        cardTypeText.text = "???";
     }
 }

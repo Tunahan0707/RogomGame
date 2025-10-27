@@ -21,8 +21,8 @@ public class CardPlayingController : MonoBehaviour
     {
         if (TurnManager.currentTurn != Turn.Player) return; 
 
-        var currentZone = CardZoneManager.GetZone(cardDisplay.cardIDInScene);
-        if (currentZone != CardZone.Hand) return;
+        var currentZone = CardZoneManager.GetZone(cardDisplay.GetCardID());
+        if (currentZone != CardZone.Hand) return; 
         
         var card = cardDisplay.cardData;
         if (ManaManager.currentMana < card.cost) return;

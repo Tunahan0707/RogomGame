@@ -19,10 +19,8 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private float settingsPanelVisibleX = 0;
     [SerializeField] private float settingsPanelHiddenX = -500;
     [SerializeField] private float settingsPanelAnimationDuration = 0.5f;
-
     [Header("Managers")]
     [SerializeField] private GameStartManager gameStartManager;
-
     [Header("Databases")]
     [SerializeField] private PlayersDataBase pDB;
     private bool isSettingsPanelVisible = false;
@@ -42,6 +40,7 @@ public class MainMenuManager : MonoBehaviour
     {
         bool saveExists = SaveManager.SaveExists(Consts.FileNames.FightDataFile);
         continueButton.interactable = saveExists;
+        PlayerDataHolder.Instance.SaveDatas();
         SkillMapManager.Instance.SetCurrentPlayer(pDB.GetPlayerByID(PlayerDataHolder.Instance.playerData.currentPlayerID));
     }
 

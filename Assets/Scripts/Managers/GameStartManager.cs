@@ -1,9 +1,10 @@
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameStartManager : MonoBehaviour
 {
-    PlayerData loadedData;
+    private PlayerData loadedData;
     [SerializeField] private PlayersDataBase pDB;
     private void Awake()
     {
