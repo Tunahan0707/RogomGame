@@ -18,6 +18,7 @@ public class CharacterSceneManager : MonoBehaviour
     private void PlayerChanced(PlayersSO player)
     {
         currentPlayer = player;
+        PlayerDataHolder.Instance.playerData.currentPlayerID = player.playerID;
         SceneManager.LoadScene(Consts.Scenes.MAIN_MENU);
         if (currentPlayer != null)
             PlayerDataHolder.Instance.SaveDatas();

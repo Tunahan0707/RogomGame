@@ -64,15 +64,13 @@ public class PlayerDataHolder : MonoBehaviour
 
     public void SaveDatas()
     {
-        if (CharacterSceneManager.currentPlayer != null)
-            playerData.currentPlayerID = CharacterSceneManager.currentPlayer.playerID;
-        if (playerData.currentPlayerID == null)
-            playerData.currentPlayerID = pDB.startingPlayer.playerID;
         playerData.PUAN = PUANManager.puan;
         Save();
     }
     public void Save()
     {
+        if (playerData.currentPlayerID == null)
+            playerData.currentPlayerID = pDB.startingPlayer.playerID;
         SaveManager.Save<PlayerData>(playerData, Consts.FileNames.PlayerDataFile);
     }
 }

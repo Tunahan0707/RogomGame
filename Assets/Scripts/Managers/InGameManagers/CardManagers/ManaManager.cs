@@ -7,6 +7,7 @@ public class ManaManager : MonoBehaviour
     public static event Action OnManaSpent;
     public static int currentMana;
     public static int maxMana;
+    [SerializeField] private PlayersDataBase pDB;
     [SerializeField] private TextMeshProUGUI manaText;
     private static TextMeshProUGUI ManaText;
     private FightData loadedData => FightDataHolder.Instance.fightData;
@@ -15,7 +16,7 @@ public class ManaManager : MonoBehaviour
     private void Awake()
     {
         ManaText = manaText;
-        maxMana = PlayersDataBase.Instance.GetPlayerByID(playerData.currentPlayerID).maxMana + playerData.extraMana;
+        maxMana = pDB.GetPlayerByID(playerData.currentPlayerID).maxMana + playerData.extraMana;
         if (loadedData.isNewSave)
             currentMana = maxMana;
         else

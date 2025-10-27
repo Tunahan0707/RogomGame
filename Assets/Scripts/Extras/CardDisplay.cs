@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using System;
 using System.Collections.Generic;
+using Unity.Android.Gradle.Manifest;
 
 public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -116,34 +117,27 @@ public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void OnCardPlayed()
     {
-        if (TurnManager.currentTurn != Turn.Player) return; 
-
-        var currentZone = CardZoneManager.GetZone(cardIDInScene);
-        if (currentZone != CardZone.Hand) return; // sadece elden oynanabilir
-
         OnCardClicked?.Invoke(this);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // eğer eldeyse, hover animasyonu el düzenini güncelleyebilir
+        HandLayout layout = transform.parent.GetComponent<HandLayout>();
+        if (layout == null) return;
         rect.SetAsLastSibling();
         rect.localScale = originalScale * 1.2f;
         rect.localRotation = Quaternion.identity;
-
-        // eğer eldeyse, hover animasyonu el düzenini güncelleyebilir
-        HandLayout layout = transform.parent.GetComponent<HandLayout>();
-        if (layout != null)
-            layout.UpdateHandLayout(gameObject);
+        layout.UpdateHandLayout(gameObject);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        HandLayout layout = transform.parent.GetComponent<HandLayout>();
+        if (layout == null) return;
         rect.localScale = originalScale;
         rect.localRotation = originalRotation;
-
-        HandLayout layout = transform.parent.GetComponent<HandLayout>();
-        if (layout != null)
-            layout.UpdateHandLayout();
+        layout.UpdateHandLayout();
     }
 
     public string GetCardID()
@@ -219,5 +213,8 @@ public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         cardNameText.text = "???";
         descriptionText.text = "Bu kart kilitli.";
         playButton.interactable = false;
+        cardNameText.transform.parent.GetComponent<Image>().color = Color.gray;
+        cardTypeText.text = "???";
+        costText.text = "?";
     }
 }

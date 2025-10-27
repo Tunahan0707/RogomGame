@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class GameStartManager : MonoBehaviour
 {
     PlayerData loadedData;
+    [SerializeField] private PlayersDataBase pDB;
     private void Awake()
     {
         if (!SaveManager.SaveExists(Consts.FileNames.PlayerDataFile))
@@ -29,9 +30,9 @@ public class GameStartManager : MonoBehaviour
         }
         PlayersSO player;
         if (loadedData.currentPlayerID != null)
-            player = PlayersDataBase.Instance.GetPlayerByID(loadedData.currentPlayerID);
+            player = pDB.GetPlayerByID(loadedData.currentPlayerID);
         else
-            player = PlayersDataBase.Instance.startingPlayer;
+            player = pDB.startingPlayer;
         foreach (var card in player.extraStartingCards)
         {
             newFightData.deck.Add(card.cardID);

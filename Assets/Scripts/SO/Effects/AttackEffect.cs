@@ -11,6 +11,10 @@ public class AttackEffect : CardEffect
 
     public override string GetDescription()
     {
+        if (player == null)
+        {
+            return $"Düşmana {damage} hasar ver";
+        }
         if (player.strenght < 0)
             description = $"Düşmana <color=#FF5555>{(damage + player.strenght)}</color> hasar ver";
         else if (player.strenght > 0)

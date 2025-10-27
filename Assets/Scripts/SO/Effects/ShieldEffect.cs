@@ -12,6 +12,10 @@ public class ShieldEffect : CardEffect
 
     public override string GetDescription()
     {
+        if (player == null)
+        {
+            return $"{shield} kalkan kazan";
+        }
         if (player.resistance < 0)
             description = $"<color=#FF5555>{(shield + player.resistance)}</color> kalkan kazan";
         else if (player.resistance > 0)
