@@ -5184,6 +5184,7 @@ MonoBehaviour:
   onFightYValue: 250
   offFightYValue: 0
   animationDuration: 3
+  pDB: {fileID: 11400000, guid: 9fb4dda26fc0c8443917523bbd1f3767, type: 2}
 --- !u!4 &1910047786
 Transform:
   m_ObjectHideFlags: 0
@@ -5304,6 +5305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d81d628b8467cb54c80b4a9b8e56edef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ManaManager
+  pDB: {fileID: 11400000, guid: 9fb4dda26fc0c8443917523bbd1f3767, type: 2}
   manaText: {fileID: 200707559}
 --- !u!1 &1973892440
 GameObject:

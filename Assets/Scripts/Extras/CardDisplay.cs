@@ -108,6 +108,7 @@ public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         PlayerManager.OnStatsChanged += UpdateCardDescription;
         ManaManager.OnManaSpent -= UpdateCostText;
         ManaManager.OnManaSpent += UpdateCostText;
+        UpdateCostText();
     }
     private void OnDestroy()
     {
@@ -161,6 +162,8 @@ public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (ManaManager.currentMana < cardData.cost)
             costText.color = Color.red;
+        else
+            costText.color = Color.white;
     }
     public void ChangeCost(bool isNew, int cost)
     {
