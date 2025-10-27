@@ -20,6 +20,7 @@ MonoBehaviour:
   baseStrenght: 0
   baseResistance: 0
   maxMana: 3
+  skillMap: {fileID: 11400000, guid: eda27e82c2aa770449bbb5af939be6cf, type: 2}
   isLocked: 0
   unlockLevel: 0
   playerID: 52481076-7774-4867-ab4b-60e75a065078

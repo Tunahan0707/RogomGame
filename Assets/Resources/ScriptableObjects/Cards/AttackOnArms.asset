@@ -16,12 +16,14 @@ MonoBehaviour:
   description: "D\xFC\u015Fman\u0131n\u0131n kollar\u0131na sald\u0131r\u0131rs\u0131n."
   artwork: {fileID: 0}
   cardType: 1
-  rarity: 0
+  rarity: 1
   cost: 0
   unlockLevel: 0
   howManyHaveOnStart: 0
   isLocked: 0
+  isUpgradedVersion: 0
   cardID: c4687140-9891-414b-957e-c19e41a3ca8d
   effects:
   - {fileID: 11400000, guid: d2bb1dddf7f718a4bb7dc66765885610, type: 2}
   - {fileID: 11400000, guid: aeb4b94551603cf4d860feae6913a341, type: 2}
+  upgradedEffects: []

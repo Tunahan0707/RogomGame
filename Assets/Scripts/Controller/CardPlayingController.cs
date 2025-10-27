@@ -19,8 +19,11 @@ public class CardPlayingController : MonoBehaviour
 
     private void OnCardPlayed(CardDisplay cardDisplay)
     {
-        if (TurnManager.currentTurn != Turn.Player) return;
+        if (TurnManager.currentTurn != Turn.Player) return; 
 
+        var currentZone = CardZoneManager.GetZone(cardDisplay.GetCardID());
+        if (currentZone != CardZone.Hand) return; 
+        
         var card = cardDisplay.cardData;
         if (ManaManager.currentMana < card.cost) return;
 
