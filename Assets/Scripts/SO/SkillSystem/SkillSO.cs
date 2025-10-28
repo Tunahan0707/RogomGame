@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -18,6 +19,7 @@ public class SkillSO : ScriptableObject
     public SkillType type = SkillType.Passive; // Pasif/aktif ayrımı
     public int manaCost = 0; // Sadece aktiflerde anlamlı
     [Tooltip("Skill açıldığında eklenecek gizli lanet yüzdesi")] public int curseGain = 5;
+    public List<SkillEffect> skillEffects = new();
 
 
     private void OnValidate()
@@ -31,4 +33,5 @@ public class SkillSO : ScriptableObject
         }
     }
 }
+
 public enum SkillType { Passive, Active }

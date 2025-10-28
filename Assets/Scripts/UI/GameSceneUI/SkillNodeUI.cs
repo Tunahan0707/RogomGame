@@ -5,15 +5,17 @@ using UnityEngine.EventSystems;
 
 public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [Header("Refs")]
+    [Header("UI References")]
     [SerializeField] private Image iconImage;
     [SerializeField] private TMP_Text nameText;
+    [SerializeField] private TMP_Text descriptionText; // tooltip yerine prefab içi açıklama
     [SerializeField] private Button unlockButton;
     [SerializeField] private Image background;
-    [SerializeField] private Image blackOverlay; // level yetmiyorsa/kapalıysa
+    [SerializeField] private Image blackOverlay;
 
     private SkillNodeDef nodeDef;
     private SkillMapUIManager mapUI;
+    private Color defaultColor;
 
     public SkillSO Skill => nodeDef != null ? nodeDef.skill : null;
 
@@ -22,18 +24,18 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         nodeDef = def;
         mapUI = ui;
 
+        descriptionText.gameObject.SetActive(false); // başlangıçta gizli
         if (Skill == null)
         {
-            iconImage.enabled = false;
             nameText.text = "Boş";
+            iconImage.enabled = false;
             unlockButton.interactable = false;
-            UpdateVisual();
             return;
         }
 
-        iconImage.enabled = true;
-        iconImage.sprite = Skill.icon;
         nameText.text = Skill.skillName;
+        iconImage.sprite = Skill.icon;
+        defaultColor = background.color;
 
         unlockButton.onClick.RemoveAllListeners();
         unlockButton.onClick.AddListener(() =>
@@ -45,18 +47,15 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         UpdateVisual();
     }
 
+    public SkillNodeDef GetNodeDef() => nodeDef;
+
     public void UpdateVisual()
     {
         var mgr = SkillMapManager.Instance;
-        if (mgr == null || Skill == null)
-        {
-            unlockButton.interactable = false;
-            if (blackOverlay) blackOverlay.enabled = true;
-            return;
-        }
+        if (mgr == null || Skill == null) return;
 
         bool unlocked = mgr.IsUnlocked(Skill);
-        bool blocked  = mgr.IsBlocked(Skill);
+        bool blocked = mgr.IsBlocked(Skill);
         bool eligible = mgr.CanUnlock(Skill);
 
         if (unlocked)
@@ -75,10 +74,7 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             background.color = Color.gray;
             unlockButton.interactable = false;
-
-            int level = XPManager.Instance != null ? XPManager.Instance.GetPlayerLevel() : 1;
-            bool levelYetmiyor = level < (nodeDef != null ? nodeDef.requiredLevel : int.MaxValue);
-            if (blackOverlay) blackOverlay.enabled = levelYetmiyor;
+            if (blackOverlay) blackOverlay.enabled = true;
         }
         else
         {
@@ -90,24 +86,24 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        var mgr = SkillMapManager.Instance;
-        if (mgr == null || Skill == null) return;
+        if (Skill == null) return;
 
-        int level = XPManager.Instance != null ? XPManager.Instance.GetPlayerLevel() : 1;
-        bool levelOK = nodeDef != null && level >= nodeDef.requiredLevel;
-        bool blocked = mgr.IsBlocked(Skill);
+        descriptionText.text = Skill.description;
+        descriptionText.gameObject.SetActive(true);
 
-        string text = (levelOK && !blocked)
-            ? $"{Skill.skillName}\n{Skill.description}\nMaliyet: {Skill.cost} PUAN"
-            : string.Empty;
-
-        if (TooltipUI.Instance != null)
-            TooltipUI.Instance.Show(text, transform.position);
+        mapUI.HighlightConnectionsForSkill(Skill); // 🔥 çizgileri parlat
+        if (!string.IsNullOrEmpty(nodeDef.exclusiveGroup))
+            mapUI.HighlightExclusiveGroup(nodeDef.exclusiveGroup, this);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (TooltipUI.Instance != null)
-            TooltipUI.Instance.Hide();
+        descriptionText.gameObject.SetActive(false);
+
+        mapUI.ResetAllHighlights(); // 🔥 çizgileri eski hale döndür
+        mapUI.ResetExclusiveHighlights();
     }
+
+
+    public string GetExclusiveGroup() => nodeDef != null ? nodeDef.exclusiveGroup : string.Empty;
 }

@@ -40,7 +40,7 @@ public class PlayerDataHolder : MonoBehaviour
     public void OnLevelUp(int newLevel)
     {
         playerData.extraHP += newLevel * 0.6f + 5;
-        playerData.extraMana += Mathf.RoundToInt((newLevel + 1) * 0.1f);
+        playerData.extraMana += Mathf.FloorToInt((newLevel + 1) * 0.1f);
         UnlockALL(newLevel);
         SaveDatas();
         Debug.Log($"📈 Oyuncu seviye atladı: {newLevel}");

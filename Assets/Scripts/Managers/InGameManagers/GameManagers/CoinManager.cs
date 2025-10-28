@@ -4,6 +4,7 @@ using System;
 public class CoinManager : MonoBehaviour
 {
     public static event Action<int> OnCoinsChanged;
+    public static CoinManager Instance { get; private set; }
 
     [field: SerializeField]
     public static int Coins { get; private set; } = 0;
@@ -11,6 +12,10 @@ public class CoinManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
         OnCoinsChanged?.Invoke(Coins);
         Coins = loadedData.coin;
     }

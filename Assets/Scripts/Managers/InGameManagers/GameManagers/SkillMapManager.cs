@@ -74,7 +74,7 @@ public class SkillMapManager : MonoBehaviour
             foreach (var pre in def.prerequisites)
             {
                 if (pre == null) continue;
-                if (!state.unlocked.Contains(pre.skillID))
+                if (!state.unlocked.Contains(pre.skill.skillID))
                     return false;
             }
         }

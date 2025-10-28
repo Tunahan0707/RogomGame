@@ -13,10 +13,85 @@ MonoBehaviour:
   m_Name: FirstSkillMap
   m_EditorClassIdentifier: Assembly-CSharp::SkillMapSO
   skillNodes:
-  - skill: {fileID: 0}
-    requiredLevel: 1
-    isCenter: 1
-    prerequisites: []
-    position: {x: 0, y: 0}
-    exclusiveGroup: 
-    isStarter: 0
+  - rid: 4889845490420547665
+  - rid: 4889845490420547666
+  - rid: 4889845490420547667
+  - rid: 4889845490420547668
+  - rid: 4889845490420547669
+  - rid: 4889845490420547670
+  - rid: 4889845490420547671
+  references:
+    version: 2
+    RefIds:
+    - rid: 4889845490420547665
+      type: {class: SkillNodeDef, ns: , asm: Assembly-CSharp}
+      data:
+        skill: {fileID: 0}
+        requiredLevel: 1
+        isCenter: 1
+        prerequisites: []
+        position: {x: 0, y: 0}
+        exclusiveGroup: 
+        isStarter: 0
+    - rid: 4889845490420547666
+      type: {class: SkillNodeDef, ns: , asm: Assembly-CSharp}
+      data:
+        skill: {fileID: 0}
+        requiredLevel: 1
+        isCenter: 0
+        prerequisites:
+        - rid: 4889845490420547669
+        position: {x: 81.332535, y: 379.82526}
+        exclusiveGroup: 
+        isStarter: 0
+    - rid: 4889845490420547667
+      type: {class: SkillNodeDef, ns: , asm: Assembly-CSharp}
+      data:
+        skill: {fileID: 0}
+        requiredLevel: 1
+        isCenter: 0
+        prerequisites: []
+        position: {x: 230, y: 0}
+        exclusiveGroup: 
+        isStarter: 0
+    - rid: 4889845490420547668
+      type: {class: SkillNodeDef, ns: , asm: Assembly-CSharp}
+      data:
+        skill: {fileID: 0}
+        requiredLevel: 1
+        isCenter: 0
+        prerequisites:
+        - rid: 4889845490420547669
+        position: {x: -91.25923, y: 384.0137}
+        exclusiveGroup: 
+        isStarter: 0
+    - rid: 4889845490420547669
+      type: {class: SkillNodeDef, ns: , asm: Assembly-CSharp}
+      data:
+        skill: {fileID: 0}
+        requiredLevel: 1
+        isCenter: 0
+        prerequisites: []
+        position: {x: -0.000010053619, y: 230}
+        exclusiveGroup: 
+        isStarter: 0
+    - rid: 4889845490420547670
+      type: {class: SkillNodeDef, ns: , asm: Assembly-CSharp}
+      data:
+        skill: {fileID: 0}
+        requiredLevel: 1
+        isCenter: 0
+        prerequisites: []
+        position: {x: -230, y: -0.000020107238}
+        exclusiveGroup: 
+        isStarter: 0
+    - rid: 4889845490420547671
+      type: {class: SkillNodeDef, ns: , asm: Assembly-CSharp}
+      data:
+        skill: {fileID: 0}
+        requiredLevel: 1
+        isCenter: 0
+        prerequisites: []
+        position: {x: 0.0000027427225, y: -230}
+        exclusiveGroup: 
+        isStarter: 0

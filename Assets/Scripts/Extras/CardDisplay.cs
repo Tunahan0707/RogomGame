@@ -160,6 +160,7 @@ public class CardDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
     public void UpdateCostText()
     {
+        if (ManaManager.Instance == null) return;
         if (ManaManager.currentMana < cardData.cost)
             costText.color = Color.red;
         else

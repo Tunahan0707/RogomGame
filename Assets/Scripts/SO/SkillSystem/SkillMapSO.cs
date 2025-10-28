@@ -6,7 +6,7 @@ using UnityEngine;
 public class SkillMapSO : ScriptableObject
 {
     [Header("Skill Node Listesi (TANIM)")]
-    public List<SkillNodeDef> skillNodes = new(); // STATE burada tutulmaz!
+    [SerializeReference] public List<SkillNodeDef> skillNodes = new(); // STATE burada tutulmaz!
 }
 
 [Serializable]
@@ -15,7 +15,7 @@ public class SkillNodeDef
     public SkillSO skill;
     public int requiredLevel = 1;
     public bool isCenter;
-    public List<SkillSO> prerequisites = new();
+    [SerializeReference] public List<SkillNodeDef> prerequisites = new();
     public Vector2 position;
 
     [Header("Alternatif Grup (Exclusive Branch)")]

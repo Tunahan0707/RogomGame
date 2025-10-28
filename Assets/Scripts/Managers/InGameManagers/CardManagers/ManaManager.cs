@@ -5,6 +5,7 @@ using UnityEngine;
 public class ManaManager : MonoBehaviour
 {
     public static event Action OnManaSpent;
+    public static ManaManager Instance { get; private set; }
     public static int currentMana;
     public static int maxMana;
     [SerializeField] private PlayersDataBase pDB;
@@ -15,6 +16,10 @@ public class ManaManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
         ManaText = manaText;
         maxMana = pDB.GetPlayerByID(playerData.currentPlayerID).maxMana + playerData.extraMana;
         if (loadedData.isNewSave)

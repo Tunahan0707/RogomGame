@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: SecondarySkill
   m_EditorClassIdentifier: Assembly-CSharp::SkillSO
   skillName: 2.skill
-  description: 
-  icon: {fileID: 0}
+  description: bu da bir deneme skilli
+  icon: {fileID: 21300000, guid: 1679bdf8a8c8fcd41bb037b3edb34bcc, type: 3}
   uiColor: {r: 1, g: 1, b: 1, a: 1}
   skillID: 206c79c5-8e25-4ffa-83b3-a79400b2485e
   cost: 1
   type: 1
   manaCost: 0
   curseGain: 5
+  skillEffects: []
